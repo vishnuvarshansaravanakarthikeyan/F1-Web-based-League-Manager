@@ -1,4 +1,4 @@
-# 🏎️ KRL F1 League Web Platform
+# 🏎️ F1 League Web Platform
 
 ![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-yellow.svg) ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white) ![License](https://img.shields.io/badge/License-GPL%203.0-blue.svg)
 
@@ -6,7 +6,7 @@
 
 ## 🧠 Introduction
 
-**KRL F1 League Web Platform** is a client-side racing league management system built with pure vanilla JavaScript. It provides a complete solution for managing F1 racing leagues including race calendars, driver standings, telemetry processing, and content management.
+**F1 League Web Platform** is a client-side racing league management system built with pure vanilla JavaScript. It provides a complete solution for managing F1 racing leagues including race calendars, driver standings, telemetry processing, and content management.
 
 The platform features:
 - **Admin Panel** for managing races, uploading telemetry, and publishing news
@@ -169,16 +169,6 @@ Several components are hardcoded in the source code and require manual editing:
 
 We welcome contributions from the community!
 
-### How to Contribute
-
-1. **Fork the repository**
-2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
-3. **Make your changes**
-4. **Test thoroughly**
-5. **Commit your changes** (`git commit -m 'Add amazing feature'`)
-6. **Push to branch** (`git push origin feature/amazing-feature`)
-7. **Open a Pull Request**
-
 ### Areas for Contribution
 
 - 🐛 Bug fixes and error handling improvements
@@ -188,14 +178,6 @@ We welcome contributions from the community!
 - ⚡ Performance optimizations
 - 🌐 Internationalization (i18n)
 - ✨ New features and functionality
-
-### Code Style Guidelines
-
-- Use vanilla JavaScript (ES6+)
-- Follow existing code structure
-- Comment complex logic
-- Test in multiple browsers
-- Ensure mobile responsiveness
 
 ---
 
