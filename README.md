@@ -37,7 +37,7 @@ Built for simplicity and ease of deployment on any static hosting platform.
 
 ```bash
 # 1. Download or clone the repository
-git clone https://github.com/yourusername/krl-league-web.git
+git clone https://github.com/vishnuvarshansaravanakarthikeyan/F1-Web-based-League-Manager.git
 
 # 2. Navigate to the project folder
 cd krl-league-web
