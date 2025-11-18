@@ -1,2 +1,1199 @@
-# F1-Web-based-League-Manager
-Manage your F1 racing league with zero backend setup. Admin panel for race tracking, telemetry uploads, and standings management. no database needed. Export JSON for multi-device sharing. Features: 17-race calendar, driver profiles, live standings, news system. Pure JavaScript drag-and-drop telemetry processing.
+# 🏎️ KRL F1 League Web Platform
+
+> A complete web-based management system for F1 racing league, featuring real-time race tracking, driver standings, telemetry processing, and content management.
+
+[![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-yellow.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+---
+
+## 🚀 TL;DR - How It Works
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  👤 ADMIN makes changes in admin panel                           │
+│      ↓                                                            │
+│  💾 Data saved to LOCALSTORAGE instantly                         │
+│      ↓                                                            │
+│  🔄 Refresh any public page (calendar, standings, etc.)          │
+│      ↓                                                            │
+│  ✅ Changes visible IMMEDIATELY (same browser)                   │
+│                                                                   │
+│  📤 Want to share with other browsers/devices?                   │
+│      → Click "Export JSON Files" button                          │
+│      → Upload to server's /data/ folder (optional)               │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+**Key Point**: Changes are **instant** in the same browser. JSON export is **optional** for multi-device sync.
+
+---
+
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Project Structure](#project-structure)
+- [Installation & Deployment](#installation--deployment)
+- [Admin Panel Guide](#admin-panel-guide)
+- [Data Management](#data-management)
+- [Known Limitations](#known-limitations)
+- [Hardcoded Elements](#hardcoded-elements)
+- [Browser Compatibility](#browser-compatibility)
+- [Security Considerations](#security-considerations)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## 🎯 Overview
+
+The KRL F1 League Web Platform is a **static-first**, **client-side** application designed for managing and displaying F1 racing league data. Built with pure vanilla JavaScript, it requires no backend infrastructure, making it perfect for static hosting platforms like Hostinger, GitHub Pages, or Netlify.
+
+### Key Characteristics
+
+- **100% Client-Side**: No server-side processing required
+- **LocalStorage-First**: Admin changes saved to browser localStorage instantly
+- **JSON Fallback**: Frontend tries JSON files first, falls back to localStorage
+- **Zero Dependencies**: No npm, no frameworks, no build process
+- **Same-Browser Sync**: Changes visible immediately after page refresh (same browser)
+
+---
+
+## ❓ Quick FAQ
+
+### How does the data flow work?
+
+**Same Browser (Normal Usage)**:
+1. Admin edits data in admin panel → Saved to **localStorage**
+2. Refresh public pages (calendar, standings, etc.)
+3. Pages load data from **localStorage** (instant updates ✅)
+4. **No JSON export needed!**
+
+**Different Browser/Device (Optional)**:
+1. Admin exports JSON files (manual step)
+2. Upload to server's `/data/` folder
+3. Other browsers fetch from JSON files
+4. Used for: backups, sharing data, multiple admin devices
+
+### Do I need to upload JSON files every time?
+
+**No!** Only if:
+- You want changes visible on **different browsers/devices**
+- You want to **backup your data**
+- You're **moving to a new computer**
+
+If you always use the **same browser**, changes are **instant** after refresh.
+
+### What if JSON files are missing/outdated?
+
+No problem! The system automatically falls back to **localStorage**, so pages still work.
+
+---
+
+## ✨ Features
+
+### 🏠 Public-Facing Features
+
+#### 1. **Homepage** (`index.html`)
+- Real-time league statistics dashboard
+- Latest race results
+- Top 3 driver standings
+- Constructor championship standings
+- Animated UI with gradient effects and racing lines
+- Responsive design for all devices
+
+#### 2. **Race Calendar** (`calendar.html`)
+- Complete 17-race season schedule
+- Live race status indicators (Upcoming, Next, Completed)
+- Country flags and circuit details
+- Season overview statistics
+- Winner display for completed races
+- Race result modal with detailed standings
+- Auto-refresh mechanism (checks for updates every 2 seconds)
+
+#### 3. **Standings Page** (`standings.html`)
+- Driver Championship standings
+- Constructor Championship standings
+- Points, wins, and podium statistics
+- Visual team color coding
+- Last update timestamp
+- Sortable columns
+
+#### 4. **Drivers Page** (`drivers.html`)
+- Grid view of all drivers
+- Driver profile cards with photos
+- Team affiliations
+- Performance statistics
+- Links to individual driver profiles
+
+#### 5. **News Section** (`news.html`)
+- League announcements
+- Race recaps
+- Driver interviews
+- News article cards with images
+- Chronological ordering
+
+#### 6. **Rules Page** (`rules.html`)
+- League regulations
+- Points system
+- Race procedures
+- Penalty guidelines
+
+#### 7. **YouTube Integration** (`youtube.html`)
+- Embedded race highlights
+- League video content
+- Social media links
+
+### 🔐 Admin Features
+
+#### **Admin Login** (`admin-login.html`)
+- Password-protected access
+- Simple authentication system
+- Session management via localStorage
+
+#### **Admin Panel** (`admin.html`)
+- Multi-tab interface with 4 sections:
+  1. **Race Management**: Add/Edit/Delete races in calendar
+  2. **News Management**: Create and manage news articles
+  3. **Telemetry Processing**: Upload race results, update standings
+  4. **Track Management**: Delete race-specific points
+
+##### Telemetry Processing Features:
+- JSON file upload (drag & drop supported)
+- Live preview of race results
+- Manual driver ordering (drag-and-drop table rows)
+- Custom driver addition
+- Automatic standings calculation
+- Points contribution tracking per race
+- Race completion marking
+- Winner assignment to calendar
+
+##### Data Export:
+- One-click export of all 9 JSON files
+- Batch download with 200ms intervals
+- Formatted JSON output (pretty-printed)
+
+---
+
+## 🏗️ Architecture
+
+### System Design
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                         SAME BROWSER                                 │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │                 Admin Panel (admin.html)                        │ │
+│  │  1. Edit races, news, upload telemetry                         │ │
+│  │  2. Data saved to localStorage INSTANTLY                       │ │
+│  │  3. Changes visible immediately on refresh                     │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                 ↓↓                                   │
+│                         ┌──────────────┐                            │
+│                         │ localStorage │  ← SINGLE SOURCE OF TRUTH  │
+│                         │  (11 keys)   │     (Same Browser)         │
+│                         └──────────────┘                            │
+│                                 ↓↓                                   │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │           Public Pages (index, calendar, standings)             │ │
+│  │  1. Try to fetch JSON from /data/ folder first                 │ │
+│  │  2. If JSON fails/missing → Fallback to localStorage           │ │
+│  │  3. Render data from whichever source succeeded                │ │
+│  │  4. Calendar auto-refreshes every 2 seconds                    │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  ✅ SAME BROWSER: Changes instant after refresh (via localStorage)  │
+└──────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│                   OPTIONAL: MULTI-BROWSER SYNC                       │
+│                   (Different computers/browsers)                     │
+│                                                                      │
+│  Admin clicks "Export JSON Files" button (Manual Step)              │
+│                         ↓                                            │
+│              Downloads 9 JSON files locally                          │
+│                         ↓                                            │
+│         Admin uploads to Hostinger /data/ folder                    │
+│                         ↓                                            │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │                 Hostinger Server (/data/)                       │ │
+│  │  - drivers.json, races.json, standings.json, etc.              │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                         ↓                                            │
+│  Other browsers/visitors fetch JSON files and see updates           │
+│                                                                      │
+│  ✅ JSON Export: Only needed for sharing data between browsers      │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+### Data Flow
+
+1. **Admin Workflow (Same Browser)**:
+   ```
+   Edit in Admin Panel → Auto-save to localStorage → 
+   Refresh public page → See changes immediately ✅
+   ```
+
+2. **Admin Workflow (Multi-Browser Sync)**:
+   ```
+   Edit in Admin Panel → Save to localStorage → 
+   Click "Export JSON Files" → Download 9 JSON files → 
+   Upload to Hostinger /data/ folder → Other browsers see updates
+   ```
+
+3. **Public Pages Data Loading**:
+   ```
+   Load HTML Page → Try fetch(/data/races.json) → 
+   If success: Use JSON data ✅
+   If fail: Use localStorage fallback ✅ → 
+   Render data → Calendar auto-refreshes every 2 seconds
+   ```
+
+4. **Telemetry Processing**:
+   ```
+   Upload JSON → Preview Results → Reorder/Edit → Select Track → 
+   Process → Update localStorage → Mark Race Complete → 
+   Refresh calendar → Winner shows immediately ✅
+   ```
+
+---
+
+## 📁 Project Structure
+
+```
+KRL League WEB/
+│
+├── 📄 index.html              # Homepage with league overview
+├── 📄 admin.html              # Admin panel (password protected)
+├── 📄 admin-login.html        # Login page (password: admin123)
+├── 📄 calendar.html           # Race calendar with 17 races
+├── 📄 standings.html          # Driver & Constructor standings
+├── 📄 drivers.html            # Driver profiles grid
+├── 📄 news.html               # News articles listing
+├── 📄 rules.html              # League rules and regulations
+├── 📄 youtube.html            # YouTube video integration
+├── 📄 export-tool.html        # Standalone export utility
+├── 📄 racecal.html            # Alternative race calendar
+├── 📄 results.html            # Race results page
+│
+├── 📂 js/                     # JavaScript modules
+│   ├── admin.js               # Admin data management (440+ lines)
+│   ├── data-manager.js        # JSON fetching & export (180+ lines)
+│   ├── data-loader.js         # Legacy loader (for migration)
+│   ├── track-completion.js    # Track completion tracking
+│   └── trackUtils.js          # Track name normalization
+│
+├── 📂 data/                   # JSON data files (9 files)
+│   ├── drivers.json           # Driver information
+│   ├── teams.json             # Team data (10 teams)
+│   ├── races.json             # Race calendar (17 races)
+│   ├── news.json              # News articles
+│   ├── driver-standings.json  # Driver championship points
+│   ├── constructor-standings.json  # Team championship points
+│   ├── completed-races.json   # Completed race records
+│   ├── race-contributions.json  # Points per race tracking
+│   └── last-update.json       # Timestamp of last standings update
+│
+├── 📂 static/                 # Static assets
+│   └── img/                   # Image directory
+│       ├── drivers/           # Driver photos (20 drivers)
+│       └── logos/             # Team logos (10 teams)
+│
+├── 📂 driver_profile/         # Individual driver pages (20 HTML files)
+│   ├── apex.html
+│   ├── arvind.html
+│   ├── aswin.html
+│   └── ... (17 more)
+│
+└── 📄 README.md               # This file
+```
+
+### File Sizes & Complexity
+
+| Component | Files | Lines of Code | Purpose |
+|-----------|-------|---------------|---------|
+| HTML Pages | 10 | ~8,000 | User interface |
+| JavaScript | 5 | ~1,500 | Logic & data management |
+| JSON Data | 9 | Varies | Persistent storage |
+| Driver Profiles | 20 | ~4,000 | Individual profiles |
+
+---
+
+## 🚀 Installation & Deployment
+
+### Prerequisites
+
+- **No server-side requirements**: PHP, Node.js, Python, etc. NOT needed
+- **No build tools**: npm, webpack, gulp, etc. NOT needed
+- **Static hosting**: Any static file host (Hostinger, GitHub Pages, Netlify, Vercel)
+
+### Local Development
+
+1. **Clone or Download** the repository:
+   ```bash
+   git clone <your-repo-url>
+   cd KRL-League-WEB
+   ```
+
+2. **Open with Live Server** (VS Code extension):
+   - Install "Live Server" extension in VS Code
+   - Right-click `index.html` → "Open with Live Server"
+   - Access at `http://127.0.0.1:5500/`
+
+
+### Production Deployment (Hostinger)
+
+#### Step 1: Upload Files
+
+Upload the entire project to your hosting:
+
+```
+ File Manager → public_html/
+├── All HTML files (10 files)
+├── js/ folder (5 JS files)
+├── data/ folder (9 JSON files)
+├── static/ folder (images)
+└── driver_profile/ folder (20 HTML files)
+```
+
+**Important**: Preserve the exact folder structure!
+
+#### Step 2: Initial Setup
+
+1. Access your site: `https://yourdomain.com/`
+2. Test public pages first (index, calendar, standings)
+3. Login to admin: `https://yourdomain.com/admin-login.html`
+4. Password: `admin123` (change this - see Security section)
+
+#### Step 3: Understanding the Workflow
+
+**🎯 SAME BROWSER (Instant Updates)**:
+```
+1. Open admin panel: https://yourdomain.com/admin.html
+2. Make changes (edit races, add news, upload telemetry)
+3. Changes auto-save to localStorage
+4. Refresh public pages (calendar, standings, etc.)
+5. ✅ See updates IMMEDIATELY - No upload needed!
+```
+**Time**: Instant (0 seconds)
+
+**🌐 DIFFERENT BROWSER/COMPUTER (Manual Sync)**:
+```
+1. Make changes in admin panel (saves to localStorage)
+2. Click "Export & Download JSON Files" (big red button)
+3. Upload 9 JSON files to /data/ folder on Hostinger
+4. Other browsers/computers refresh to see updates
+```
+**Time**: ~35 seconds (only needed for multi-device sync)
+
+**💡 Key Point**: 
+- If you only use **one browser**, changes are **instant** after refresh
+- JSON export is **optional**, only for sharing data with other browsers/devices
+
+### Alternative Deployment Platforms
+
+| Platform | Steps |
+|----------|-------|
+| **GitHub Pages** | Push to repo → Enable Pages → Access at username.github.io/repo |
+| **Netlify** | Drag & drop entire folder → Get URL |
+| **Vercel** | `vercel deploy` → Done |
+| **Surge.sh** | `surge .` in project folder |
+
+---
+
+## 🛠️ Admin Panel Guide
+
+### Access & Authentication
+
+- **URL**: `/admin-login.html`
+- **Default Password**: `admin123`
+- **Session**: Stored in `localStorage` (key: `admin_authenticated`)
+- **Logout**: Click "Logout" button in admin panel
+
+### Tab 1: Race Management
+
+**Add New Race**:
+1. Click "Add New Race"
+2. Fill in:
+   - Round number (01-17)
+   - Grand Prix name (e.g., "Australian Grand Prix")
+   - Circuit name (e.g., "Melbourne Grand Prix Circuit")
+   - Date (YYYY-MM-DD)
+   - Flag emoji (e.g., 🇦🇺)
+   - Status (upcoming/next/completed)
+   - Winner (if completed)
+3. Click "Save Race"
+
+**Edit Race**:
+1. Click "Edit" on any race card
+2. Modify fields in modal
+3. Save changes
+
+**Delete Race**:
+1. Click "Delete" on race card
+2. Confirm deletion
+
+### Tab 2: News Management
+
+**Add News Article**:
+1. Click "Add News Article"
+2. Enter title and content
+3. Optionally upload image
+4. Save
+
+**Edit/Delete News**:
+- Similar to race management
+
+### Tab 3: Telemetry Processing
+
+**Upload Race Results**:
+
+1. **Prepare Telemetry JSON**:
+   ```json
+   {
+     "players": [
+       {
+         "name": "Driver Name",
+         "teamName": "Team Name",
+         "finishingPosition": 1,
+         "points": 25
+       }
+     ]
+   }
+   ```
+
+2. **Upload File**:
+   - Click "Choose File" or drag & drop
+   - Table appears automatically with preview
+
+3. **Reorder Drivers** (if needed):
+   - Drag table rows up/down
+   - Position determines final placement
+
+4. **Add Custom Driver** (if missing):
+   - Click "Add Custom Driver"
+   - Fill in name and team
+   - Driver added to bottom of table
+
+5. **Select Track**:
+   - Choose track from dropdown
+   - List includes all 17 calendar races
+
+6. **Process Results**:
+   - Click "Upload & Process for Selected Track"
+   - Confirms with popup
+   - Updates standings automatically
+   - Marks race as completed in calendar
+   - Assigns winner to calendar
+
+### Tab 4: Track Management
+
+**Delete Race Points**:
+1. Select completed track from dropdown
+2. Click "Delete Points for Track"
+3. Standings revert (points subtracted)
+4. Race marked as incomplete
+
+### Export Data
+
+**Big Red Button**: "Export & Download JSON Files"
+
+1. Click button
+2. 9 JSON files download sequentially
+3. Modal appears with instructions
+4. Upload files to `/data/` folder on server
+
+**Files exported**:
+- `drivers.json`
+- `teams.json`
+- `races.json`
+- `news.json`
+- `driver-standings.json`
+- `constructor-standings.json`
+- `completed-races.json`
+- `race-contributions.json`
+- `last-update.json`
+
+---
+
+## 💾 Data Management
+
+### LocalStorage Keys
+
+The system uses 11 localStorage keys:
+
+| Key | Purpose | Format |
+|-----|---------|--------|
+| `admin_authenticated` | Login state | Boolean string |
+| `drivers_data` | Driver information | Array of objects |
+| `teams_data` | Team information | Array of objects |
+| `calendar_races` | Race calendar | Array of objects |
+| `news_data` | News articles | Array of objects |
+| `driverStandings` | Driver points | Array of objects |
+| `constructorStandings` | Team points | Array of objects |
+| `completedRaces` | Completed race map | Object (key-value) |
+| `raceContributions` | Points per race | Object (nested) |
+| `standingsLastUpdate` | Timestamp | ISO date string |
+| `standings_data` | Legacy standings | Object (deprecated) |
+
+### JSON File Structure
+
+#### `drivers.json`
+```json
+[
+  {
+    "id": "harish",
+    "name": "Jilla Harish",
+    "team": "Red Bull Racing",
+    "photo": "Harish.png",
+    "points": 286,
+    "wins": 5,
+    "podiums": 9,
+    "position": 1,
+    "profilePage": "harish.html"
+  }
+]
+```
+
+#### `races.json`
+```json
+[
+  {
+    "id": "1",
+    "round": "01",
+    "grandPrixName": "Australian Grand Prix",
+    "circuit": "Melbourne Grand Prix Circuit",
+    "date": "2025-03-16",
+    "flag": "🇦🇺",
+    "status": "upcoming",
+    "winner": "",
+    "completed": false
+  }
+]
+```
+
+#### `completed-races.json`
+```json
+{
+  "Monza Circuit": {
+    "completed": true,
+    "winner": "Simman",
+    "team": "Ferrari",
+    "timestamp": "2025-11-18T10:30:00.000Z"
+  }
+}
+```
+
+#### `race-contributions.json`
+```json
+{
+  "Monza Circuit": {
+    "Simman": 25,
+    "Driver 2": 18,
+    "Driver 3": 15
+  }
+}
+```
+
+### Data Initialization
+
+**First-time setup** (automatic):
+
+1. `admin.js` checks if data exists in localStorage
+2. If empty, initializes with hardcoded defaults:
+   - **20 drivers** (Red Bull, Ferrari, Mercedes, McLaren, etc.)
+   - **10 teams** (with logos and colors)
+   - **17 races** (2025 F1 calendar)
+3. Data persists in localStorage
+4. Admin exports → JSON files created
+
+---
+
+## ⚠️ Known Limitations
+
+### 1. **Browser Security Restrictions**
+
+- **Cannot write files directly to server**: JavaScript in browsers cannot write files to servers due to security sandboxing
+- **localStorage is domain-specific**: Data doesn't sync across different domains
+- **localStorage size limit**: ~5-10MB per domain (browser-dependent)
+
+### 2. **LocalStorage Dependency**
+
+- **Same-browser limitation**: Changes only visible in the browser where admin edited (via localStorage)
+- **Manual export for multi-device**: Must export JSON and upload to server for other browsers/devices to see updates
+- **No real-time cross-browser sync**: If Admin A edits on Browser A, Admin B on Browser B won't see changes until JSON is uploaded
+- **Multi-admin conflicts**: If two admins edit simultaneously in different browsers, last export wins (no merge)
+- **localStorage is domain-specific**: Clearing browser data = losing all admin changes
+
+### 3. **Authentication**
+
+- **Client-side only**: Password check happens in JavaScript (insecure)
+- **localStorage session**: Can be cleared by user (logs out)
+- **No rate limiting**: Brute force attacks possible
+- **Hardcoded password**: Default is `admin123` (easily readable in source)
+
+### 4. **Data Integrity**
+
+- **No database constraints**: Duplicate IDs, invalid data possible
+- **No transaction support**: Partial saves can occur if browser crashes
+- **No backup system**: Old data overwritten on export
+- **No audit trail**: Can't track who changed what
+
+### 5. **Performance**
+
+- **localStorage is synchronous**: Blocking operations on large datasets
+- **JSON parsing on every load**: Can slow down with 1000+ entries
+- **No pagination**: All data loaded at once
+- **No search indexing**: Filtering is client-side linear search
+
+### 6. **Scalability**
+
+- **Not suitable for 100+ drivers**: localStorage may become slow
+- **No caching**: Every page load re-fetches JSON
+- **No CDN integration**: Images not optimized for delivery
+- **No lazy loading**: All images load on page render
+
+### 7. **Mobile Experience**
+
+- **Drag-and-drop limited**: Touch support for table reordering is basic
+- **Large tables**: Telemetry table hard to view on small screens
+- **No offline mode**: Requires internet for JSON fetching
+- **Zoom required**: Some pages use `zoom: 80%` CSS hack
+
+### 8. **Error Handling**
+
+- **Silent failures**: Some errors only show in console
+- **No retry logic**: Failed JSON fetch = empty data
+- **No validation**: Invalid JSON uploads can break things
+- **No rollback**: Can't undo bad telemetry uploads
+
+---
+
+## 🔧 Hardcoded Elements
+
+### 1. **Hardcoded in `admin.js`**
+
+#### Initial Driver Data (Lines 186-414)
+```javascript
+const initialDriverData = {
+    "harish": {
+        name: "Jilla Harish",
+        team: "Red Bull Racing",
+        photo: "Harish.png",
+        points: 286,
+        // ... 19 more drivers
+    }
+}
+```
+**Issue**: If starting fresh season, must manually edit this object.
+
+#### Initial Teams (Lines 652-724)
+```javascript
+const initialTeams = [
+    {
+        id: "1",
+        name: "Red Bull Racing",
+        code: "RB",
+        color: "#3671C6",
+        logo: "./static/img/redbull-logo.png"
+    },
+    // ... 9 more teams
+]
+```
+**Issue**: Team colors and logos hardcoded, not editable in UI.
+
+#### Initial Race Calendar (Lines 472-644)
+```javascript
+const initialTracks = [
+    {
+        id: "1",
+        round: "01",
+        grandPrixName: "Australian Grand Prix",
+        circuit: "Melbourne Grand Prix Circuit",
+        date: "2025-03-16",
+        flag: "🇦🇺"
+    },
+    // ... 16 more races
+]
+```
+**Issue**: 2025 calendar hardcoded. Need to edit code for 2026 season.
+
+### 2. **Hardcoded in `admin.html`**
+
+#### Track Name Mapping (Lines 791-811)
+```javascript
+const trackNameMapping = {
+  "Italy": "Monza Circuit",
+  "Italian": "Monza Circuit",
+  "Monza": "Monza Circuit",
+  "Japan": "Suzuka Circuit",
+  // ... 15 more mappings
+}
+```
+**Issue**: Telemetry JSON may use different track names; must update mapping manually.
+
+#### Points System (Embedded in telemetry processing)
+```javascript
+// Implicit in code - not configurable
+// P1 = 25, P2 = 18, P3 = 15, P4 = 12, P5 = 10, 
+// P6 = 8, P7 = 6, P8 = 4, P9 = 2, P10 = 1
+```
+**Issue**: Cannot change points system without editing code.
+
+### 3. **Hardcoded in `trackUtils.js`**
+
+#### Track Normalization (Lines 2-23)
+```javascript
+const trackMappings = {
+    "Italy": "Monza Circuit",
+    "Japan": "Suzuka Circuit",
+    // ... duplicates admin.html mappings
+}
+```
+**Issue**: Duplicate of admin.html mappings, can diverge.
+
+### 4. **Hardcoded in HTML Pages**
+
+#### Navigation Menu (In every HTML file)
+```html
+<ul class="nav-menu">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="standings.html">Standings</a></li>
+    <!-- ... must edit in 10+ files -->
+</ul>
+```
+**Issue**: No shared navigation component; must edit each file individually.
+
+#### Colors and Styling (Inline CSS)
+```html
+<style>
+    body { background: #0A0A0F; color: #fff; }
+    .navbar { background: rgba(10, 10, 10, 0.95); }
+    /* ... hundreds of hardcoded colors */
+</style>
+```
+**Issue**: Cannot change theme without editing every HTML file.
+
+#### Admin Password (Lines 175 in `admin.js`)
+```javascript
+function authenticate(password) {
+    if (password === 'admin123') { // Hardcoded!
+        localStorage.setItem(ADMIN_KEY, 'true');
+        return true;
+    }
+    return false;
+}
+```
+**Issue**: Password visible in source code, must edit to change.
+
+### 5. **Hardcoded Paths**
+
+#### Image Paths
+```javascript
+photo: "Harish.png"  // Assumes static/img/drivers/Harish.png
+logo: "./static/img/redbull-logo.png"
+```
+**Issue**: Path structure fixed, cannot reorganize without editing code.
+
+#### Data File Paths (in `data-manager.js`)
+```javascript
+this.dataPath = './data/';  // Hardcoded relative path
+```
+**Issue**: Cannot move data folder without editing code.
+
+### 6. **Not Centralized**
+
+#### Driver Profile Pages
+- 20 separate HTML files (`apex.html`, `harish.html`, etc.)
+- Each has duplicate navigation, styling
+- No template system
+- Must edit 20 files to update shared content
+
+#### Team Logos
+- Filenames hardcoded in team data
+- No upload UI
+- Must manually add to `static/img/` folder
+
+#### Race Results Modal
+- Hardcoded sample data in `calendar.html` (Lines 879-891)
+```javascript
+const raceResults = {
+  "Melbourne Grand Prix Circuit": [
+    { position: 1, driver: "Simman", team: "KRL Racing", points: 25 },
+    // Sample data that doesn't sync with real data
+  ]
+};
+```
+**Issue**: Fake data in production code.
+
+---
+
+## 🌐 Browser Compatibility
+
+| Browser | Version | Status | Notes |
+|---------|---------|--------|-------|
+| Chrome | 90+ | ✅ Full Support | Recommended |
+| Firefox | 88+ | ✅ Full Support | Works perfectly |
+| Safari | 14+ | ⚠️ Partial | localStorage limits strict |
+| Edge | 90+ | ✅ Full Support | Chromium-based |
+| Opera | 76+ | ✅ Full Support | Chromium-based |
+| IE 11 | ❌ Not Supported | Fetch API missing |
+| Mobile Safari | iOS 14+ | ⚠️ Partial | Touch drag-drop limited |
+| Chrome Mobile | Android 90+ | ✅ Full Support | Works well |
+
+### Required Browser Features
+
+- **ES6 JavaScript**: Arrow functions, template literals, async/await
+- **Fetch API**: For loading JSON files
+- **LocalStorage**: For admin data persistence
+- **FileReader API**: For telemetry JSON upload
+- **Blob API**: For JSON file downloads
+- **StorageEvent**: For cross-tab synchronization
+
+---
+
+## 🔒 Security Considerations
+
+### Critical Security Issues
+
+#### 1. **Exposed Admin Password**
+```javascript
+// admin.js line 175
+if (password === 'admin123') { // VISIBLE IN SOURCE CODE!
+```
+**Risk**: Anyone can view source and get password.
+
+**Mitigation**:
+- Change password immediately after deployment
+- Use complex password (20+ characters)
+- Consider IP whitelisting at hosting level
+- Use .htaccess or Cloudflare Access for additional auth
+
+#### 2. **No Server-Side Validation**
+- All validation happens in browser
+- User can manipulate localStorage directly
+- Can inject malicious data
+
+**Mitigation**:
+- Regular backups of JSON files
+- Monitor for suspicious data changes
+- Consider adding PHP backend with proper auth
+
+#### 3. **XSS Vulnerabilities**
+```javascript
+// Example from code
+element.innerHTML = userInput; // POTENTIAL XSS!
+```
+**Risk**: Malicious scripts in news articles or driver names.
+
+**Mitigation**:
+- Sanitize all user input
+- Use `textContent` instead of `innerHTML` where possible
+- Implement Content Security Policy (CSP)
+
+#### 4. **CORS Issues**
+- JSON files fetched via relative paths
+- May fail if served from different origin
+
+**Mitigation**:
+- Serve from same domain
+- Configure CORS headers if using CDN
+
+### Recommended Security Enhancements
+
+1. **Use environment variables** for password (if adding backend)
+2. **Add HTTPS enforcement** (free with Hostinger/Let's Encrypt)
+3. **Implement rate limiting** on login attempts
+4. **Add two-factor authentication** (via third-party service)
+5. **Enable Cloudflare** for DDoS protection
+6. **Regular security audits** of JSON files
+
+---
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+#### Issue: "Admin panel shows old data after uploading JSON"
+
+**Cause**: Browser cache or localStorage out of sync.
+
+**Fix**:
+1. Clear browser cache (Ctrl+Shift+Delete)
+2. Or hard refresh (Ctrl+F5)
+3. Or clear localStorage: `localStorage.clear()` in console
+
+---
+
+#### Issue: "Calendar not showing winners after telemetry upload"
+
+**Cause**: Storage event not triggering or completed-races.json not uploaded.
+
+**Fix**:
+1. Open admin panel
+2. Export all JSON files again
+3. Verify `completed-races.json` was uploaded to `/data/`
+4. Check browser console for errors
+
+---
+
+#### Issue: "Export button downloads files but shows no alert"
+
+**Cause**: Popup blocker or browser setting.
+
+**Fix**:
+1. Allow popups for your domain
+2. Check Downloads folder - files may have downloaded
+3. Try different browser (Chrome recommended)
+
+---
+
+#### Issue: "Telemetry upload shows 'No results found'"
+
+**Cause**: JSON format incorrect or file not loaded.
+
+**Fix**:
+1. Verify JSON structure matches expected format:
+   ```json
+   {
+     "players": [
+       { "name": "...", "teamName": "...", "finishingPosition": 1 }
+     ]
+   }
+   ```
+2. Check browser console for parsing errors
+3. Ensure file has `.json` extension
+
+---
+
+#### Issue: "Drag-and-drop reordering not working"
+
+**Cause**: JavaScript not loaded or browser incompatibility.
+
+**Fix**:
+1. Check console for errors
+2. Ensure JavaScript is enabled
+3. Try desktop browser (mobile support limited)
+4. Use manual position editing as fallback
+
+---
+
+#### Issue: "404 errors for images"
+
+**Cause**: Incorrect path or missing files.
+
+**Fix**:
+1. Verify folder structure:
+   ```
+   static/img/drivers/  <- Driver photos
+   static/img/logos/    <- Team logos
+   ```
+2. Check filenames match exactly (case-sensitive on Linux)
+3. Upload missing images
+
+---
+
+#### Issue: "LocalStorage quota exceeded"
+
+**Cause**: Too much data stored (5-10MB limit).
+
+**Fix**:
+1. Export and clear old data
+2. Delete completed race contributions for old seasons
+3. Compress images before upload
+4. Consider JSON files as primary storage (don't rely on localStorage)
+
+---
+
+#### Issue: "Changes in admin panel not showing on public pages"
+
+**Scenario 1: Same browser** (Most common)
+
+**Cause**: Page not refreshed or cache issue.
+
+**Fix**:
+1. Simply refresh the public page (F5 or Ctrl+R)
+2. Changes should appear instantly (localStorage fallback)
+3. If not, hard refresh (Ctrl+F5) to clear cache
+4. Check browser console for errors
+
+**Scenario 2: Different browser/device**
+
+**Cause**: Changes saved to localStorage in Admin Browser A, but viewing on Browser B.
+
+**Fix**:
+1. Go back to admin panel on Browser A
+2. Click "Export & Download JSON Files" button
+3. Upload all 9 files to `/data/` folder on server
+4. Refresh Browser B to fetch updated JSON files
+5. Wait 2 seconds (calendar auto-refresh interval)
+
+---
+
+### Debug Mode
+
+Add to browser console for verbose logging:
+
+```javascript
+// Enable debug mode
+localStorage.setItem('debug', 'true');
+
+// View all localStorage data
+console.table(Object.entries(localStorage));
+
+// Check if JSON files are loading
+fetch('./data/races.json')
+  .then(r => r.json())
+  .then(data => console.log('Races:', data))
+  .catch(err => console.error('Error:', err));
+```
+
+---
+
+## 🤝 Contributing
+
+### Areas for Improvement
+
+1. **Backend Integration**
+   - Add PHP/Node.js API for auto-save
+   - Implement database (MySQL/MongoDB)
+   - Real-time sync with WebSockets
+
+2. **UI/UX Enhancements**
+   - Add team management UI in admin
+   - Drag-and-drop file upload everywhere
+   - Mobile-optimized admin panel
+   - Dark/light theme toggle
+
+3. **Data Management**
+   - Import/export CSV for bulk updates
+   - Data validation and error messages
+   - Undo/redo functionality
+   - Backup and restore system
+
+4. **Performance**
+   - Implement pagination for large datasets
+   - Add search and filter functionality
+   - Lazy load images
+   - Service worker for offline support
+
+5. **Security**
+   - Server-side authentication
+   - JWT tokens for API access
+   - Input sanitization library
+   - SQL injection prevention (if adding DB)
+
+6. **Features**
+   - Multi-season support
+   - Historical data archive
+   - Statistics and analytics dashboard
+   - Email notifications for race updates
+
+### How to Contribute
+
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Open Pull Request
+
+### Code Style
+
+- **JavaScript**: ES6+, 2-space indentation
+- **HTML**: Semantic tags, consistent formatting
+- **CSS**: BEM naming, mobile-first
+- **Comments**: Explain "why", not "what"
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+```
+MIT License
+
+Copyright (c) 2025 KRL F1 League
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+---
+
+## 📞 Support
+
+For issues, questions, or feature requests:
+
+- **GitHub Issues**: [Create an issue](https://github.com/yourusername/krl-league/issues)
+- **Email**: support@krlleague.com
+- **Discord**: [Join our server](https://discord.gg/krlleague)
+
+---
+
+## 🙏 Acknowledgments
+
+- **F1** for inspiration
+- **Hostinger** for reliable hosting
+- **Open Source Community** for tools and libraries
+- **All contributors** who help improve this project
+
+---
+
+## 📊 Project Stats
+
+- **Total Lines of Code**: ~15,000
+- **HTML Files**: 30+
+- **JavaScript Files**: 5
+- **JSON Data Files**: 9
+- **Development Time**: 100+ hours
+- **Last Updated**: November 18, 2025
+- **Version**: 2.0.0
+
+---
+
+## 🗺️ Roadmap
+
+### Version 2.1 (Q1 2026)
+- [ ] Add PHP backend for auto-save
+- [ ] Implement MySQL database
+- [ ] Add team management UI
+- [ ] Mobile app (PWA)
+
+### Version 2.2 (Q2 2026)
+- [ ] Multi-season support
+- [ ] Advanced analytics dashboard
+- [ ] Email notifications
+- [ ] API for third-party integrations
+
+### Version 3.0 (Q3 2026)
+- [ ] Full rewrite with React/Vue
+- [ ] Real-time updates (WebSockets)
+- [ ] Cloud storage integration
+- [ ] Multi-language support
+
+---
+
+**Made with ❤️ by the KRL F1 League Team**
+
+*Last updated: November 18, 2025*
