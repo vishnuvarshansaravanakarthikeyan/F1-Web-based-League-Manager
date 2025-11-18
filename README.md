@@ -216,16 +216,6 @@ See the [LICENSE](LICENSE) file for full details.
 
 ---
 
-## 📞 Support
-
-For questions, issues, or suggestions:
-
-- 🐛 **Bug Reports:** [GitHub Issues](https://github.com/yourusername/krl-league/issues)
-- 💡 **Feature Requests:** Open a discussion
-- 📧 **Email:** support@krlleague.com
-
----
-
 ## 👨‍💻 Author
 
 **Vishnu Varshan**  
