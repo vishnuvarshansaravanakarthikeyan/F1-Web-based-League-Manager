@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRL F1 Hub - Race Calendar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0A0A0F;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(225, 6, 0, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #E10600;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            padding: 0.5rem 0;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #E10600, #ff4500);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .nav-menu a:hover::before,
+        .nav-menu a.active::before {
+            width: 100%;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #E10600;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom right, #E10600, #15151E, #0A0A0F);
+        }
+
+        .animated-stripes {
+            position: absolute;
+            inset: 0;
+            opacity: 0.2;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            background-size: 200% 200%;
+            animation: moveStripes 20s linear infinite;
+        }
+
+        @keyframes moveStripes {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        .racing-lines-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .racing-line {
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(to right, transparent, #E10600, transparent);
+            animation: racingLine 3s ease-in-out infinite;
+        }
+
+        .racing-line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .racing-line:nth-child(2) { top: 40%; animation-delay: 0.5s; }
+        .racing-line:nth-child(3) { top: 60%; animation-delay: 1s; }
+        .racing-line:nth-child(4) { top: 80%; animation-delay: 1.5s; }
+
+        @keyframes racingLine {
+            0% { transform: translateX(-100%); opacity: 0; }
+            25% { opacity: 1; }
+            75% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+
+        .glow-orb-1 {
+            position: absolute;
+            width: 384px;
+            height: 384px;
+            background: #E10600;
+            border-radius: 50%;
+            filter: blur(96px);
+            opacity: 0.2;
+            top: 10%;
+            left: 10%;
+            animation: floatOrb1 10s ease-in-out infinite;
+        }
+
+        .glow-orb-2 {
+            position: absolute;
+            width: 384px;
+            height: 384px;
+            background: #FFD700;
+            border-radius: 50%;
+            filter: blur(96px);
+            opacity: 0.1;
+            bottom: 10%;
+            right: 10%;
+            animation: floatOrb2 12s ease-in-out infinite;
+        }
+
+        @keyframes floatOrb1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(100px, 50px) scale(1.2); }
+        }
+
+        @keyframes floatOrb2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-100px, 100px) scale(1.3); }
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .page-title {
+            font-size: 4rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title .gradient-text {
+            background: linear-gradient(to right, #FFD700, white, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.3rem;
+            color: #C0C0C8;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-fade {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 128px;
+            background: linear-gradient(to top, #0A0A0F, transparent);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .main-content {
+            padding: 4rem 0;
+        }
+
+        /* Season Overview */
+        .season-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .overview-card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(225, 6, 0, 0.2);
+            transition: all 0.3s;
+            animation: fadeIn 0.5s ease-out both;
+        }
+
+        .overview-card:nth-child(1) { animation-delay: 0.1s; }
+        .overview-card:nth-child(2) { animation-delay: 0.2s; }
+        .overview-card:nth-child(3) { animation-delay: 0.3s; }
+        .overview-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .overview-card:hover {
+            border-color: rgba(225, 6, 0, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .overview-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .overview-value {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #E10600;
+            margin-bottom: 0.25rem;
+        }
+
+        .overview-label {
+            color: #aaa;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+        }
+
+        /* Section Title */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-line {
+            width: 4px;
+            height: 48px;
+            background: linear-gradient(to bottom, #FFD700, transparent);
+            border-radius: 9999px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: -0.025em;
+        }
+
+        /* Calendar Table */
+        .calendar-container {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(225, 6, 0, 0.2);
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            overflow-x: auto;
+        }
+
+        .calendar-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .calendar-table thead th {
+            background: rgba(225, 6, 0, 0.1);
+            padding: 1.2rem;
+            text-align: left;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #E10600;
+            font-size: 0.875rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .calendar-table thead th:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .calendar-table thead th:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .calendar-table tbody tr {
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.3s;
+            animation: slideIn 0.5s ease-out both;
+        }
+
+        .calendar-table tbody tr:nth-child(1) { animation-delay: 0.05s; }
+        .calendar-table tbody tr:nth-child(2) { animation-delay: 0.1s; }
+        .calendar-table tbody tr:nth-child(3) { animation-delay: 0.15s; }
+        .calendar-table tbody tr:nth-child(4) { animation-delay: 0.2s; }
+        .calendar-table tbody tr:nth-child(5) { animation-delay: 0.25s; }
+        .calendar-table tbody tr:nth-child(6) { animation-delay: 0.3s; }
+        .calendar-table tbody tr:nth-child(7) { animation-delay: 0.35s; }
+        .calendar-table tbody tr:nth-child(8) { animation-delay: 0.4s; }
+        .calendar-table tbody tr:nth-child(9) { animation-delay: 0.45s; }
+        .calendar-table tbody tr:nth-child(10) { animation-delay: 0.5s; }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .calendar-table tbody tr:hover {
+            background: rgba(225, 6, 0, 0.1);
+            transform: scale(1.01);
+        }
+
+        .calendar-table tbody tr.completed {
+            opacity: 0.7;
+        }
+
+        .calendar-table tbody tr.next-race {
+            background: rgba(225, 6, 0, 0.15);
+            border-left: 4px solid #E10600;
+        }
+
+        .calendar-table tbody tr.next-race:hover {
+            background: rgba(225, 6, 0, 0.2);
+        }
+
+        .calendar-table td {
+            padding: 1.5rem 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .round-cell {
+            font-weight: 900;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #E10600, #ff4500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .race-flag {
+            font-size: 2rem;
+        }
+
+        .race-name-cell {
+            font-weight: 700;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .circuit-name {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .date-cell {
+            color: #FFD700;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .status-badge.completed {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00FF00;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+
+        .view-result-btn {
+            background: linear-gradient(135deg, #E10600, #ff4500);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .view-result-btn:hover {
+            background: linear-gradient(135deg, #ff1a00, #E10600);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(225, 6, 0, 0.4);
+        }
+        
+        .view-result-btn:disabled {
+            background: rgba(128, 128, 128, 0.2);
+            color: #666;
+            cursor: not-allowed;
+            border: 1px solid rgba(128, 128, 128, 0.3);
+        }
+
+        .status-badge.upcoming {
+            background: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .status-badge.next {
+            background: linear-gradient(135deg, #E10600, #ff4500);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .winner-cell {
+            color: #FFD700;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .winner-cell .trophy {
+            margin-right: 0.25rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 3rem 0 1.5rem;
+            border-top: 1px solid rgba(225, 6, 0, 0.3);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: #888;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            margin: 5% auto;
+            padding: 2rem;
+            border: 1px solid rgba(225, 6, 0, 0.2);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(225, 6, 0, 0.3);
+            padding-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #E10600;
+            margin: 0;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #E10600;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .results-table th,
+        .results-table td {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        .results-table th {
+            background: rgba(225, 6, 0, 0.1);
+            color: #E10600;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+        }
+
+        .results-table tbody tr {
+            background: rgba(255, 255, 255, 0.02);
+            transition: background 0.3s;
+        }
+
+        .results-table tbody tr:hover {
+            background: rgba(225, 6, 0, 0.1);
+        }
+
+        .position-cell {
+            font-weight: 900;
+            color: #FFD700;
+        }
+
+        .driver-cell {
+            font-weight: 600;
+            color: white;
+        }
+
+        .team-cell {
+            color: #aaa;
+        }
+
+        .points-cell {
+            font-weight: 700;
+            color: #E10600;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #aaa;
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        .race-info-section {
+            background: rgba(225, 6, 0, 0.05);
+            border-left: 4px solid #E10600;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .race-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .race-info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .race-info-label {
+            color: #888;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .race-info-value {
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .race-info-value.winner {
+            color: #FFD700;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                height: 300px;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .page-subtitle {
+                font-size: 1rem;
+            }
+
+            .season-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .calendar-table {
+                font-size: 0.85rem;
+            }
+
+            .calendar-table td {
+                padding: 1rem 0.5rem;
+            }
+
+            .round-cell {
+                font-size: 1.2rem;
+            }
+
+            .race-flag {
+                font-size: 1.5rem;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                padding: 1rem;
+                width: 95%;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+
+            .results-table th,
+            .results-table td {
+                padding: 0.5rem;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body style="zoom: 80%;">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">KRL F1</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="standings.html">Standings</a></li>
+                <li><a href="rules.html">Rules</a></li>
+                <li><a href="drivers.html">Drivers</a></li>
+                <li><a href="calendar.html" class="active">Calendar</a></li>
+                <li><a href="youtube.html">Youtube</a></li>
+                <li><a href="news.html">news</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="animated-stripes"></div>
+        
+        <div class="racing-lines-container">
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+        </div>
+
+        <div class="glow-orb-1"></div>
+        <div class="glow-orb-2"></div>
+
+        <div class="hero-content">
+            <h1 class="page-title">
+                RACE <span class="gradient-text">CALENDAR</span>
+            </h1>
+            <p class="page-subtitle">2025 Season Schedule • 17 Races Across the Globe</p>
+        </div>
+
+        <div class="hero-fade"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Season Overview -->
+            <div class="season-overview">
+                <div class="overview-card">
+                    <div class="overview-icon">🏁</div>
+                    <div class="overview-value" id="totalRaces">0</div>
+                    <div class="overview-label">Total Races</div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon">✅</div>
+                    <div class="overview-value" id="racesCompleted">0</div>
+                    <div class="overview-label">Completed</div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon">⏳</div>
+                    <div class="overview-value" id="racesRemaining">0</div>
+                    <div class="overview-label">Remaining</div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon">🌍</div>
+                    <div class="overview-value" id="uniqueCountries">0</div>
+                    <div class="overview-label">Countries</div>
+                </div>
+            </div>
+
+        <!-- Calendar Table -->
+        <div class="section-header">
+            <div class="section-line"></div>
+            <h2 class="section-title">Race Schedule</h2>
+        </div>
+
+        <div class="calendar-container">
+            <table class="calendar-table">
+                <thead>
+                    <tr>
+                        <th>Round</th>
+                        <th>Flag</th>
+                        <th>Grand Prix</th>
+                        <th>Circuit</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Winner</th>
+                        <th>Results</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarTbody">
+                    <!-- Races will be loaded dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            &copy; 2024 KRL F1 Hub. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Results Modal -->
+    <div id="resultsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle" class="modal-title">Race Results</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modalBody">
+                <!-- Results table will be inserted here -->
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/data-manager.js"></script>
+<script>
+// Load race schedule from JSON files (with localStorage fallback)
+async function getRaceSchedule() {
+  try {
+    const races = await window.dataManager.getRaces();
+    return races.map(race => ({
+      round: race.round,
+      flag: race.flag,
+      name: race.grandPrixName,
+      circuit: race.circuit,
+      date: new Date(race.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      status: race.status || 'upcoming',
+      winner: race.winner || '—'
+    }));
+  } catch (error) {
+    console.error('Error loading race schedule:', error);
+    return [];
+  }
+}
+
+// Sample race results data
+const raceResults = {
+  "Melbourne Grand Prix Circuit": [
+    { position: 1, driver: "Simman", team: "KRL Racing", points: 25 },
+    { position: 2, driver: "Driver 2", team: "Team B", points: 18 },
+    { position: 3, driver: "Driver 3", team: "Team C", points: 15 },
+    { position: 4, driver: "Driver 4", team: "Team D", points: 12 },
+    { position: 5, driver: "Driver 5", team: "Team E", points: 10 },
+    { position: 6, driver: "Driver 6", team: "Team F", points: 8 },
+    { position: 7, driver: "Driver 7", team: "Team G", points: 6 },
+    { position: 8, driver: "Driver 8", team: "Team H", points: 4 },
+    { position: 9, driver: "Driver 9", team: "Team I", points: 2 },
+    { position: 10, driver: "Driver 10", team: "Team J", points: 1 }
+  ]
+};
+
+async function getCompletedTracks() {
+  try {
+    // First try to get from localStorage (which is the source of truth for admin edits)
+    const localCompleted = localStorage.getItem('completedRaces');
+    if (localCompleted) {
+      const parsed = JSON.parse(localCompleted);
+      // Check if it's already an object or an array
+      if (Array.isArray(parsed)) {
+        // Convert array to object by track name for easier lookup
+        const result = {};
+        parsed.forEach(race => {
+          result[race.trackName || race.track || race.circuit] = race;
+        });
+        return result;
+      } else {
+        // Already an object, return as is
+        return parsed;
+      }
+    }
+    
+    // Fallback to JSON file
+    const completedRaces = await window.dataManager.getCompletedRaces();
+    // Convert array to object by track name for easier lookup
+    const result = {};
+    if (Array.isArray(completedRaces)) {
+      completedRaces.forEach(race => {
+        result[race.trackName || race.track || race.circuit] = race;
+      });
+    } else {
+      // If JSON file has object format, return as is
+      return completedRaces;
+    }
+    return result;
+  } catch (error) {
+    console.error('Error loading completed tracks:', error);
+    return {};
+  }
+}
+
+async function updateCalendarCompletion() {
+  try {
+    const completed = await getCompletedTracks();
+    const rows = document.querySelectorAll('tbody tr[data-track]');
+    rows.forEach(row => {
+      const track = row.getAttribute('data-track');
+      const statusCell = row.querySelector('td:nth-child(6) span.status-badge');
+      const winnerCell = row.querySelector('td:nth-child(7)');
+      const viewButton = row.querySelector('.view-result-btn');
+      
+      if(completed[track]) {
+        row.classList.add('completed');
+        if(statusCell) {
+          statusCell.textContent = '✓ Completed';
+          statusCell.className = 'status-badge completed';
+        }
+        // Update winner from completed races data
+        if(winnerCell && completed[track].winner) {
+          winnerCell.textContent = completed[track].winner;
+        }
+        if(viewButton) {
+          viewButton.disabled = false;
+        }
+      } else {
+        row.classList.remove('completed');
+        if(statusCell && statusCell.classList.contains('completed')) {
+          statusCell.textContent = '⏳ Upcoming';
+          statusCell.className = 'status-badge upcoming';
+        }
+        if(winnerCell && completed[track] === undefined) {
+          winnerCell.textContent = '—';
+        }
+        if(viewButton) {
+          viewButton.disabled = true;
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error updating calendar completion:', error);
+  }
+}
+
+function viewResult(button) {
+  const row = button.closest('tr');
+  const track = row.getAttribute('data-track');
+  const raceName = row.querySelector('.race-name-cell').textContent;
+  const circuit = row.querySelector('.circuit-name').textContent;
+  const date = row.querySelector('.date-cell').textContent;
+  const round = row.querySelector('.round-cell').textContent;
+  const flag = row.querySelector('.race-flag').textContent;
+  const winner = row.querySelector('.winner-cell').textContent;
+  const statusBadge = row.querySelector('.status-badge');
+  const isCompleted = statusBadge && statusBadge.classList.contains('completed');
+
+  // Set modal title with flag
+  document.getElementById('modalTitle').textContent = `${flag} ${raceName}`;
+
+  const modalBody = document.getElementById('modalBody');
+
+  // Create race info section
+  let raceInfoHTML = `
+    <div class="race-info-section">
+      <div class="race-info-grid">
+        <div class="race-info-item">
+          <span class="race-info-label">Round</span>
+          <span class="race-info-value">${round}</span>
+        </div>
+        <div class="race-info-item">
+          <span class="race-info-label">Circuit</span>
+          <span class="race-info-value">${circuit}</span>
+        </div>
+        <div class="race-info-item">
+          <span class="race-info-label">Date</span>
+          <span class="race-info-value">${date}</span>
+        </div>
+        <div class="race-info-item">
+          <span class="race-info-label">Winner</span>
+          <span class="race-info-value winner">${isCompleted ? '🏆 ' + winner : '—'}</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Get results for this track
+  const results = raceResults[track];
+
+  if (results && isCompleted) {
+    // Create results table
+    let tableHTML = raceInfoHTML + `
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Pos</th>
+            <th>Driver</th>
+            <th>Team</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    results.forEach(result => {
+      tableHTML += `
+        <tr>
+          <td class="position-cell">${result.position}</td>
+          <td class="driver-cell">${result.driver}</td>
+          <td class="team-cell">${result.team}</td>
+          <td class="points-cell">${result.points}</td>
+        </tr>
+      `;
+    });
+
+    tableHTML += `
+        </tbody>
+      </table>
+    `;
+
+    modalBody.innerHTML = tableHTML;
+  } else if (isCompleted) {
+    modalBody.innerHTML = raceInfoHTML + '<div class="no-results">Detailed results are being processed.</div>';
+  } else {
+    modalBody.innerHTML = raceInfoHTML + '<div class="no-results">This race has not been completed yet.</div>';
+  }
+
+  // Show modal
+  document.getElementById('resultsModal').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('resultsModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+  const modal = document.getElementById('resultsModal');
+  if (event.target === modal) {
+    modal.style.display = 'none';
+  }
+}
+
+async function loadRaces() {
+  try {
+    const tbody = document.getElementById('calendarTbody');
+    tbody.innerHTML = ''; // Clear existing content
+    const raceSchedule = await getRaceSchedule();
+    const completed = await getCompletedTracks();
+    
+    raceSchedule.forEach((race, index) => {
+      const row = document.createElement('tr');
+      row.setAttribute('data-track', race.circuit);
+      row.style.animationDelay = `${index * 0.05}s`;
+      
+      // Check if race is actually completed based on both status and completedRaces
+      const isCompleted = race.status === 'completed' || completed[race.circuit];
+      const buttonDisabled = !isCompleted ? 'disabled' : '';
+      
+      // Get winner from completed races or race data
+      let winnerName = race.winner || '—';
+      if (isCompleted && completed[race.circuit] && completed[race.circuit].winner) {
+        winnerName = completed[race.circuit].winner;
+      }
+      
+      // Determine actual status
+      let statusText, statusClass;
+      if (isCompleted) {
+        statusText = '✓ Completed';
+        statusClass = 'completed';
+        row.classList.add('completed');
+      } else if (race.status === 'next') {
+        statusText = '🔥 Next';
+        statusClass = 'next';
+        row.classList.add('next-race');
+      } else {
+        statusText = '⏳ Upcoming';
+        statusClass = 'upcoming';
+      }
+
+    row.innerHTML = `
+      <td class="round-cell">${race.round}</td>
+      <td class="race-flag">${race.flag}</td>
+      <td class="race-name-cell">${race.name}</td>
+      <td class="circuit-name">${race.circuit}</td>
+      <td class="date-cell">${race.date}</td>
+      <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+      <td class="winner-cell">${winnerName}</td>
+      <td><button class="view-result-btn" onclick="viewResult(this)" ${buttonDisabled}>View Details</button></td>
+    `;
+
+    tbody.appendChild(row);
+  });
+  } catch (error) {
+    console.error('Error loading races:', error);
+  }
+}
+
+function updateSeasonStats() {
+  const rows = document.querySelectorAll('tbody tr[data-track]');
+  let totalRaces = 0;
+  let completedRaces = 0;
+  let countriesSet = new Set();
+
+  rows.forEach(row => {
+    // Ignore preseason or any special non-championship rows if needed (round 00), or count all if desired
+    const roundCell = row.querySelector('.round-cell');
+    if (roundCell && roundCell.textContent.trim() !== "") {
+      totalRaces++;
+    }
+
+    if (row.classList.contains('completed')) {
+      completedRaces++;
+    }
+
+    // For country count, use flag cell or circuit cell or race name cell as source
+    const raceFlagCell = row.querySelector('.race-flag');
+    if (raceFlagCell) {
+      countriesSet.add(raceFlagCell.textContent.trim());
+    }
+  });
+
+  // Set values
+  document.getElementById('totalRaces').textContent = totalRaces;
+  document.getElementById('racesCompleted').textContent = completedRaces;
+  document.getElementById('racesRemaining').textContent = totalRaces - completedRaces;
+  document.getElementById('uniqueCountries').textContent = countriesSet.size;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadRaces();
+  updateCalendarCompletion();
+  updateSeasonStats();
+  
+  // Check for updates periodically (every 2 seconds)
+  setInterval(function() {
+    updateCalendarCompletion();
+    updateSeasonStats();
+  }, 2000);
+});
+
+// Listen for storage changes from admin panel
+window.addEventListener('storage', function(e) {
+  if (e.key === 'calendar_races' || e.key === 'completedRaces') {
+    // Reload races when calendar data changes
+    const tbody = document.getElementById('calendarTbody');
+    tbody.innerHTML = '';
+    loadRaces();
+    updateCalendarCompletion();
+    updateSeasonStats();
+  }
+});
+
+</script>
+
+</html>

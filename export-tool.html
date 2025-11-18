@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Export Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        button {
+            background: linear-gradient(135deg, #E10600, #ff4500);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(225, 6, 0, 0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        .file-list {
+            text-align: left;
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .info {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            border-radius: 5px;
+        }
+        .icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon">📦</div>
+        <h1>Quick Export Tool</h1>
+        <p class="subtitle">Export all your F1 League data to JSON files</p>
+        
+        <div class="info">
+            <strong>💡 What this does:</strong><br>
+            Downloads all data from localStorage as JSON files ready for Hostinger upload.
+        </div>
+
+        <button onclick="exportAll()">📥 Export All Data</button>
+        <button onclick="checkData()">🔍 Check Data Status</button>
+
+        <div id="status" class="status"></div>
+    </div>
+
+    <script src="js/data-manager.js"></script>
+    <script>
+        async function exportAll() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status';
+            statusDiv.innerHTML = '⏳ Exporting data...';
+            statusDiv.style.display = 'block';
+
+            try {
+                await window.dataManager.exportAllData();
+                
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = `
+                    <strong>✅ Export Successful!</strong>
+                    <div class="file-list">
+                        📄 drivers.json<br>
+                        📄 teams.json<br>
+                        📄 news.json<br>
+                        📄 races.json<br>
+                        📄 driver-standings.json<br>
+                        📄 constructor-standings.json<br>
+                        📄 completed-races.json<br>
+                        📄 race-contributions.json<br>
+                        📄 last-update.json
+                    </div>
+                    <p style="margin-top: 15px;">
+                        <strong>Next step:</strong> Upload these files to your Hostinger <code>data/</code> folder!
+                    </p>
+                `;
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = `
+                    <strong>❌ Export Failed</strong><br>
+                    ${error.message}
+                `;
+            }
+        }
+
+        function checkData() {
+            const statusDiv = document.getElementById('status');
+            
+            const keys = [
+                'drivers_data',
+                'teams_data',
+                'news_data',
+                'calendar_races',
+                'driverStandings',
+                'constructorStandings',
+                'completedRaces',
+                'raceContributions'
+            ];
+
+            let report = '<strong>📊 Data Status:</strong><div class="file-list">';
+            let hasData = false;
+
+            keys.forEach(key => {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        const count = Array.isArray(parsed) ? parsed.length : Object.keys(parsed).length;
+                        report += `✅ ${key}: ${count} items<br>`;
+                        hasData = true;
+                    } catch {
+                        report += `⚠️ ${key}: Invalid data<br>`;
+                    }
+                } else {
+                    report += `❌ ${key}: No data<br>`;
+                }
+            });
+
+            report += '</div>';
+
+            if (!hasData) {
+                report += '<p style="margin-top: 15px; color: #856404; background: #fff3cd; padding: 10px; border-radius: 5px;">⚠️ No data found in localStorage. Please use the admin panel to add data first.</p>';
+            }
+
+            statusDiv.className = 'status success';
+            statusDiv.innerHTML = report;
+            statusDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

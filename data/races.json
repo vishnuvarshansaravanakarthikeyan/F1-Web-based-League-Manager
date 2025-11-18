@@ -1,0 +1,172 @@
+[
+    {
+        "id": "1",
+        "round": "01",
+        "grandPrixName": "Australian Grand Prix",
+        "circuit": "Melbourne Grand Prix Circuit",
+        "date": "2025-03-16",
+        "flag": "🇦🇺",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "2",
+        "round": "02",
+        "grandPrixName": "Japanese Grand Prix",
+        "circuit": "Suzuka Circuit",
+        "date": "2025-03-30",
+        "flag": "🇯🇵",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "3",
+        "round": "03",
+        "grandPrixName": "Saudi Arabian Grand Prix",
+        "circuit": "Jeddah Corniche Circuit",
+        "date": "2025-04-13",
+        "flag": "🇸🇦",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "4",
+        "round": "04",
+        "grandPrixName": "Spanish Grand Prix",
+        "circuit": "Circuit de Barcelona-Catalunya",
+        "date": "2025-04-27",
+        "flag": "🇪🇸",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "5",
+        "round": "05",
+        "grandPrixName": "Bahrain Grand Prix",
+        "circuit": "Bahrain International Circuit",
+        "date": "2025-05-11",
+        "flag": "🇧🇭",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "6",
+        "round": "06",
+        "grandPrixName": "Austrian Grand Prix",
+        "circuit": "Red Bull Ring",
+        "date": "2025-05-25",
+        "flag": "🇦🇹",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "7",
+        "round": "07",
+        "grandPrixName": "Canadian Grand Prix",
+        "circuit": "Circuit Gilles Villeneuve",
+        "date": "2025-06-08",
+        "flag": "🇨🇦",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "8",
+        "round": "08",
+        "grandPrixName": "Italian Grand Prix",
+        "circuit": "Monza Circuit",
+        "date": "2025-06-22",
+        "flag": "🇮🇹",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "9",
+        "round": "09",
+        "grandPrixName": "British Grand Prix",
+        "circuit": "Silverstone Circuit",
+        "date": "2025-07-06",
+        "flag": "🇬🇧",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "10",
+        "round": "10",
+        "grandPrixName": "Belgian Grand Prix",
+        "circuit": "Circuit de Spa-Francorchamps",
+        "date": "2025-07-20",
+        "flag": "🇧🇪",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "11",
+        "round": "11",
+        "grandPrixName": "Las Vegas Grand Prix",
+        "circuit": "Las Vegas Strip Circuit",
+        "date": "2025-08-03",
+        "flag": "🇺🇸",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "12",
+        "round": "12",
+        "grandPrixName": "Azerbaijan Grand Prix",
+        "circuit": "Baku City Circuit",
+        "date": "2025-08-17",
+        "flag": "🇦🇿",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "13",
+        "round": "13",
+        "grandPrixName": "Dutch Grand Prix",
+        "circuit": "Circuit Zandvoort",
+        "date": "2025-08-31",
+        "flag": "🇳🇱",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "14",
+        "round": "14",
+        "grandPrixName": "United States Grand Prix",
+        "circuit": "Circuit of the Americas",
+        "date": "2025-09-14",
+        "flag": "🇺🇸",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "15",
+        "round": "15",
+        "grandPrixName": "Mexico City Grand Prix",
+        "circuit": "Autódromo Hermanos Rodríguez",
+        "date": "2025-09-28",
+        "flag": "🇲🇽",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "16",
+        "round": "16",
+        "grandPrixName": "São Paulo Grand Prix",
+        "circuit": "Autódromo José Carlos Pace",
+        "date": "2025-10-12",
+        "flag": "🇧🇷",
+        "status": "upcoming",
+        "winner": ""
+    },
+    {
+        "id": "17",
+        "round": "17",
+        "grandPrixName": "Abu Dhabi Grand Prix",
+        "circuit": "Yas Marina Circuit",
+        "date": "2025-10-26",
+        "flag": "🇦🇪",
+        "status": "upcoming",
+        "winner": ""
+    }
+]

@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KR Hub - Drivers</title>
+    <script src="js/app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0A0A0F;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(225, 6, 0, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #E10600;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            padding: 0.5rem 0;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #E10600, #ff4500);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .nav-menu a:hover::before,
+        .nav-menu a.active::before {
+            width: 100%;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #E10600;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom right, #E10600, #15151E, #0A0A0F);
+        }
+
+        .animated-stripes {
+            position: absolute;
+            inset: 0;
+            opacity: 0.2;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            background-size: 200% 200%;
+            animation: moveStripes 20s linear infinite;
+        }
+
+        @keyframes moveStripes {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        .racing-lines-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .racing-line {
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(to right, transparent, #E10600, transparent);
+            animation: racingLine 3s ease-in-out infinite;
+        }
+
+        .racing-line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .racing-line:nth-child(2) { top: 40%; animation-delay: 0.5s; }
+        .racing-line:nth-child(3) { top: 60%; animation-delay: 1s; }
+        .racing-line:nth-child(4) { top: 80%; animation-delay: 1.5s; }
+
+        @keyframes racingLine {
+            0% { transform: translateX(-100%); opacity: 0; }
+            25% { opacity: 1; }
+            75% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+
+        .glow-orb-1 {
+            position: absolute;
+            width: 384px;
+            height: 384px;
+            background: #E10600;
+            border-radius: 50%;
+            filter: blur(96px);
+            opacity: 0.2;
+            top: 10%;
+            left: 10%;
+            animation: floatOrb1 10s ease-in-out infinite;
+        }
+
+        .glow-orb-2 {
+            position: absolute;
+            width: 384px;
+            height: 384px;
+            background: #FFD700;
+            border-radius: 50%;
+            filter: blur(96px);
+            opacity: 0.1;
+            bottom: 10%;
+            right: 10%;
+            animation: floatOrb2 12s ease-in-out infinite;
+        }
+
+        @keyframes floatOrb1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(100px, 50px) scale(1.2); }
+        }
+
+        @keyframes floatOrb2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-100px, 100px) scale(1.3); }
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .page-title {
+            font-size: 4rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title .gradient-text {
+            background: linear-gradient(to right, #FFD700, white, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.3rem;
+            color: #C0C0C8;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-fade {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 128px;
+            background: linear-gradient(to top, #0A0A0F, transparent);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .main-content {
+            padding: 4rem 0;
+        }
+
+        /* Drivers Grid */
+        .drivers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .driver-card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(225, 6, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            animation: fadeIn 0.5s ease-out both;
+        }
+
+        .driver-card:nth-child(1) { animation-delay: 0.1s; }
+        .driver-card:nth-child(2) { animation-delay: 0.15s; }
+        .driver-card:nth-child(3) { animation-delay: 0.2s; }
+        .driver-card:nth-child(4) { animation-delay: 0.25s; }
+        .driver-card:nth-child(5) { animation-delay: 0.3s; }
+        .driver-card:nth-child(6) { animation-delay: 0.35s; }
+        .driver-card:nth-child(7) { animation-delay: 0.4s; }
+        .driver-card:nth-child(8) { animation-delay: 0.45s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .driver-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(225, 6, 0, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .driver-card:hover::before {
+            left: 100%;
+        }
+
+        .driver-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(225, 6, 0, 0.3);
+            border-color: rgba(225, 6, 0, 0.5);
+        }
+
+        .driver-image-container {
+            position: relative;
+            height: 380px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+        }
+
+        .driver-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .driver-card:hover .driver-image {
+            transform: scale(1.1);
+        }
+
+        .driver-position-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #E10600, #ff4500);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .team-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 50px;
+            height: 50px;
+            background: none;
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 0px solid;
+            font-weight: 900;
+            font-size: 1.2rem;
+        }
+
+        .driver-info {
+            padding: 2rem;
+            padding-bottom: 5px;
+            padding-top: 10px;
+        }
+
+        .driver-name {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 0.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .driver-team {
+            color: #aaa;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .team-color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .driver-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.0rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 900;
+            padding-top: 0px;
+            color: #E10600;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .view-profile-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #E10600, #8b0000);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .view-profile-btn:hover {
+            background: linear-gradient(135deg, #ff1a00, #E10600);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(225, 6, 0, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 3rem 0 1.5rem;
+            border-top: 1px solid rgba(225, 6, 0, 0.3);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: #888;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                height: 300px;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .page-subtitle {
+                font-size: 1rem;
+            }
+
+            .drivers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body style="zoom: 80%;">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">KRL F1</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="standings.html">Standings</a></li>
+                <li><a href="rules.html">Rules</a></li>
+                <li><a href="drivers.html" class="active">Drivers</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="youtube.html">Youtube</a></li>
+                <li><a href="news.html">news</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="animated-stripes"></div>
+        
+        <div class="racing-lines-container">
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+        </div>
+
+        <div class="glow-orb-1"></div>
+        <div class="glow-orb-2"></div>
+
+        <div class="hero-content">
+            <h1 class="page-title">
+                <span class="gradient-text">DRIVER</span> PROFILES
+            </h1>
+            <p class="page-subtitle">Meet the competitors of the 2025 season</p>
+        </div>
+
+        <div class="hero-fade"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <div class="drivers-grid">
+            <!-- Driver 1 -->
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Harish.png" alt="Alex Martinez" class="driver-image">
+                    <div class="driver-position-badge">P1</div>
+                    <img src="./static/img/logos/RedBull.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Jilla Harish</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #3671C6;"></span>
+                        Red Bull Racing
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">286</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">5</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">9</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/DT.jpg" alt="Alex Martinez" class="driver-image">
+                    <div class="driver-position-badge">P1</div>
+                    <img src="./static/img/logos/RedBull.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name" style="font-size: 20px;">TamilGamingDoctorYT</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #3671C6;"></span>
+                        Red Bull Racing
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">286</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">5</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">9</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Driver 2 -->
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Simman.png" alt="Jordan Smith" class="driver-image">
+                    <div class="driver-position-badge">P2</div>
+                    <img src="./static/img/logos/Ferrari.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Simman</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #E10600;"></span>
+                        Ferrari
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">274</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">4</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">8</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Jamieson.jpg" alt="Jordan Smith" class="driver-image">
+                    <div class="driver-position-badge">P2</div>
+                    <img src="./static/img/logos/Ferrari.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Jamieson Paul</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #E10600;"></span>
+                        Ferrari
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">274</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">4</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">8</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Driver 3 -->
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Nightfury.png" alt="Chris Johnson" class="driver-image">
+                    <div class="driver-position-badge">P3</div>
+                    <img src="./static/img/logos/Benz.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Nightfurykar</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #00D2BE;"></span>
+                        Mercedes
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">251</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">7</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Majunu.jpg" alt="Chris Johnson" class="driver-image">
+                    <div class="driver-position-badge">P3</div>
+                    <img src="./static/img/logos/Benz.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">iammajunu</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #00D2BE;"></span>
+                        Mercedes
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">251</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">7</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Driver 4 -->
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Aswin.jpg" alt="Sam Wilson" class="driver-image">
+                    <div class="driver-position-badge">P4</div>
+                    <img src="./static/img/logos/Mclaren.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Ashwin</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #FF8700;"></span>
+                        McLaren
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">228</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">1</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">6</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Arvind.jpg" alt="Sam Wilson" class="driver-image">
+                    <div class="driver-position-badge">P4</div>
+                    <img src="./static/img/logos/Mclaren.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Arvindsiva</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #FF8700;"></span>
+                        McLaren
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">228</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">1</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">6</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Driver 5 -->
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/tokumei.png" alt="Taylor Brown" class="driver-image">
+                    <div class="driver-position-badge">P5</div>
+                    <img src="./static/img/logos/AstonMartin.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Tokumei</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #006F62;"></span>
+                        Aston Martin
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">195</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">4</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Vibhi.jpg" alt="Taylor Brown" class="driver-image">
+                    <div class="driver-position-badge">P5</div>
+                    <img src="./static/img/logos/AstonMartin.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Vibhi</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #006F62;"></span>
+                        Aston Martin
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">195</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">4</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Driver 6 -->
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Hariharan.png" alt="Jamie Lee" class="driver-image">
+                    <div class="driver-position-badge">P6</div>
+                    <img src="./static/img/logos/Willams.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name" style="font-size: 22px;">HariharanPerumal</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #E10600;"></span>
+                        Williams
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">182</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">3</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Denji.jpg" alt="Jamie Lee" class="driver-image">
+                    <div class="driver-position-badge">P6</div>
+                    <img src="./static/img/logos/Willams.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Dennjiiiii</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #E10600;"></span>
+                        Williams
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">182</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">3</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Driver 7 -->
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Apex.jpg" alt="Morgan Davis" class="driver-image">
+                    <div class="driver-position-badge">P7</div>
+                    <img src="./static/img/logos/RB.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Apexentropy</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #3671C6;"></span>
+                        Racing Bulls
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">168</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/jinx.png" alt="Morgan Davis" class="driver-image">
+                    <div class="driver-position-badge">P7</div>
+                    <img src="./static/img/logos/RB.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Jinx</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #3671C6;"></span>
+                        Racing Bulls
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">168</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Driver 8 -->
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Dicaprio.jpg" alt="Casey Miller" class="driver-image">
+                    <div class="driver-position-badge">P8</div>
+                    <img src="./static/img/logos/Kick.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Dicaprio33</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #00D2BE;"></span>
+                        Kick Sauber
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">145</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Kentucky.jpg" alt="Casey Miller" class="driver-image">
+                    <div class="driver-position-badge">P8</div>
+                    <img src="./static/img/logos/Kick.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Kentucky</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #00D2BE;"></span>
+                        Kick Sauber
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">145</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Sleazy.jpg" alt="Casey Miller" class="driver-image">
+                    <div class="driver-position-badge">P8</div>
+                    <img src="./static/img/logos/Haas.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">SleazyUwU</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #00D2BE;"></span>
+                        MoneyGram Haas F1
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">145</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Bala.jpg" alt="Casey Miller" class="driver-image">
+                    <div class="driver-position-badge">P8</div>
+                    <img src="./static/img/logos/Haas.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">Bala</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #00D2BE;"></span>
+                        MoneyGram Haas F1
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">145</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Ramkumar.jpg" alt="Casey Miller" class="driver-image">
+                    <div class="driver-position-badge">P8</div>
+                    <img src="./static/img/logos/Alpine.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name">RamKumar</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #00D2BE;"></span>
+                        Alpine F1
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">145</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="driver-card">
+                <div class="driver-image-container">
+                    <img src="./static/img/drivers/Spartan.jpg" alt="Casey Miller" class="driver-image">
+                    <div class="driver-position-badge">P8</div>
+                    <img src="./static/img/logos/Alpine.png" alt="Alex Martinez" class="team-badge">
+                </div>
+                <div class="driver-info">
+                    <h3 class="driver-name" style="font-size: 27px;">Spartan Gamer</h3>
+                    <p class="driver-team">
+                        <span class="team-color-dot" style="background: #00D2BE;"></span>
+                        Alpine F1
+                    </p>
+                    <div class="driver-stats">
+                        <div class="stat">
+                            <span class="stat-value">145</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">Podiums</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2025 F1 25 KRL F1 League Championship.</p>
+            <p>Powered by F1 25 Game | EA Sports</p>
+        </div>
+    </footer>
+
+    <script src="js/data-manager.js"></script>
+    <script>
+        async function renderDriverStats() {
+            try {
+                // Get drivers data from JSON files (with localStorage fallback)
+                const driverStandingsData = await window.dataManager.getDriverStandings();
+                let drivers = Array.isArray(driverStandingsData) ? driverStandingsData : Object.values(driverStandingsData);
+
+                // Get all driver cards
+                const driverCards = document.querySelectorAll('.driver-card');
+
+                driverCards.forEach(card => {
+                    const driverName = card.querySelector('.driver-name').textContent.trim();
+                    const driverData = drivers.find(d => d.name === driverName);
+
+                    const stats = card.querySelectorAll('.stat-value');
+                    if (stats.length >= 3) {
+                        if (driverData) {
+                            // Update stats if data exists
+                            stats[0].textContent = (driverData.points !== undefined) ? driverData.points : 'NA'; // Points
+                            stats[1].textContent = (driverData.wins !== undefined) ? driverData.wins : 'NA';   // Wins
+                            stats[2].textContent = (driverData.podiums !== undefined) ? driverData.podiums : 'NA'; // Podiums
+                        } else {
+                            // Set to NA if no data
+                            stats[0].textContent = 'NA';
+                            stats[1].textContent = 'NA';
+                            stats[2].textContent = 'NA';
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error rendering driver stats:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', renderDriverStats);
+    </script>
+</body>
+</html>

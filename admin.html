@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>F1 League Admin Panel</title>
+<style>
+body { 
+    font-family: Arial, sans-serif; 
+    background:#121212; 
+    color:#eee; 
+    padding: 1rem;
+    margin: 0;
+}
+
+.admin-header {
+    background: #1a1a1a;
+    padding: 1rem;
+    margin: -1rem -1rem 1rem -1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #E10600;
+}
+
+.admin-nav {
+    display: flex;
+    gap: 1rem;
+}
+
+h1 { color: #E10600; margin: 0; }
+
+.tab-container {
+    margin-top: 2rem;
+}
+
+.tab-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.tab-button {
+    padding: 0.75rem 1.5rem;
+    background: #1a1a1a;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.tab-button.active {
+    background: #E10600;
+}
+
+.tab-content {
+    display: none;
+    background: #1a1a1a;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+input[type="file"], button { margin-top: 1rem; }
+
+button { 
+    padding: 0.5rem 1rem; 
+    font-weight: bold; 
+    background:#E10600; 
+    border:none; 
+    border-radius:5px; 
+    color:#fff; 
+    cursor:pointer; 
+}
+
+button:hover {
+    background: #ff1a1a;
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 1rem;
+    background: #242424;
+}
+
+th, td { 
+    border: 1px solid #444; 
+    padding: 0.5rem; 
+    text-align: left; 
+}
+
+th { 
+    background: #333;
+    color: #fff;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.5rem;
+    background: #242424;
+    border: 1px solid #444;
+    color: #fff;
+    border-radius: 4px;
+}
+
+textarea {
+    min-height: 100px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 350px);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.card {
+    background: #242424;
+    padding: 1rem;
+    border-radius: 5px;
+    position: relative;
+    height: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.card-actions {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.status { margin-top: 1rem; color: #4CAF50; }
+.error { color: #f44336; }
+
+#status { margin-top: 1rem; }
+
+/* Calendar Table Styles */
+.calendar-container {
+    background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(225, 6, 0, 0.2);
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+    overflow-x: auto;
+}
+
+.calendar-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.calendar-table thead th {
+    background: rgba(225, 6, 0, 0.1);
+    padding: 1.2rem;
+    text-align: left;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #E10600;
+    font-size: 0.875rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.calendar-table thead th:first-child {
+    border-radius: 10px 0 0 10px;
+}
+
+.calendar-table thead th:last-child {
+    border-radius: 0 10px 10px 0;
+}
+
+.calendar-table tbody tr {
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.3s;
+    animation: slideIn 0.5s ease-out both;
+}
+
+.calendar-table tbody tr:hover {
+    background: rgba(225, 6, 0, 0.1);
+    transform: scale(1.01);
+}
+
+.calendar-table tbody tr.completed {
+    opacity: 0.7;
+}
+
+.calendar-table td {
+    padding: 1.5rem 1.2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.round-cell {
+    font-weight: 900;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, #E10600, #ff4500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.race-flag {
+    font-size: 2rem;
+}
+
+.race-name-cell {
+    font-weight: 700;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.circuit-name {
+    color: #888;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+.date-cell {
+    color: #FFD700;
+    font-weight: 600;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.status-badge.completed {
+    background: rgba(0, 255, 0, 0.2);
+    color: #00FF00;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.status-badge.upcoming {
+    background: rgba(255, 215, 0, 0.2);
+    color: #FFD700;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.status-badge.next {
+    background: linear-gradient(135deg, #E10600, #ff4500);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.winner-cell {
+    color: #FFD700;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Modal Styles */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #1a1a1a;
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid #E10600;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.modal-close:hover {
+    color: #E10600;
+}
+</style>
+</head>
+<body>
+    <div class="admin-header">
+        <h1>F1 League Admin Panel</h1>
+        <div class="admin-nav">
+            <span id="saveStatus" style="color: #4CAF50; margin-right: 1rem; font-weight: bold;">● All Changes Saved</span>
+            <button onclick="exportAllData()" style="background: #E10600; margin-right: 1rem; padding: 0.6rem 1.5rem; font-weight: bold;">� Export & Download JSON Files</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="tab-container">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="races">Race Management</button>
+            <button class="tab-button" data-tab="news">News</button>
+            <button class="tab-button" data-tab="telemetry">Race Results</button>
+        </div>
+
+        <!-- Race Management Tab -->
+        <div id="races" class="tab-content active">
+            <h2>Race Management</h2>
+            <div class="form-group">
+                <button onclick="showAddRaceForm()">Add New Race</button>
+            </div>
+            <div id="racesList" class="grid-container">
+                <!-- Races will be listed here -->
+            </div>
+        </div>
+
+        <!-- News Tab -->
+        <div id="news" class="tab-content">
+            <h2>News Management</h2>
+            <div class="form-group">
+                <button onclick="showAddNewsForm()">Add News Article</button>
+            </div>
+            <div id="newsList" class="grid-container">
+                <!-- News articles will be listed here -->
+            </div>
+        </div>
+
+        <!-- Race Results/Telemetry Tab -->
+        <div id="telemetry" class="tab-content">
+            <h2>Race Results & Telemetry</h2>
+
+            <div class="form-group">
+                <label>Select Track (to associate upload with):</label>
+                <select id="trackSelect"></select>
+            </div>
+
+            <div class="form-group">
+                <label>Telemetry JSON File</label>
+                <input type="file" id="fileInput" accept=".json" />
+            </div>
+
+            <div class="form-group">
+                <button id="uploadForTrackBtn">Upload & Process for Selected Track</button>
+                <button onclick="downloadCompleted()">Download Completed Races</button>
+                <button onclick="clearCompletedRaces()">Clear All Results</button>
+            </div>
+
+            <div class="form-group">
+                <button id="deleteTrackPointsBtn">Delete Points for Selected Track</button>
+                <button id="deleteAllPointsBtn">Delete Points for All Tracks</button>
+                <p id="status"></p>
+            </div>
+
+            <table id="resultsTable" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Driver Name</th>
+                        <th>Team</th>
+                        <th>Best Lap Time</th>
+                        <th>Sector 1</th>
+                        <th>Sector 2</th>
+                        <th>Sector 3</th>
+                        <th>Top Speed (km/h)</th>
+                        <th>Position</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTbody"></tbody>
+            </table>
+
+            <div class="form-group" id="addCustomDriverDiv" style="display:none;">
+                <button onclick="addCustomDriver()">Add Custom Driver</button>
+            </div>
+        </div>
+    </div>
+
+<script src="js/data-manager.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/trackUtils.js"></script>
+<script>
+// Global variable to track if we're editing a race
+let editingRaceId = null;
+
+// Check authentication
+if (!window.adminAPI.isAuthenticated()) {
+    window.location.href = 'admin-login.html';
+}
+
+// Tab Navigation
+document.querySelectorAll('.tab-button').forEach(button => {
+    button.addEventListener('click', () => {
+        // Remove active class from all buttons and contents
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        // Add active class to clicked button and corresponding content
+        button.classList.add('active');
+        document.getElementById(button.dataset.tab).classList.add('active');
+    });
+});
+
+// Logout function
+function logout() {
+    window.adminAPI.logout();
+}
+
+// Show save notification
+function showSaveNotification() {
+    const statusSpan = document.getElementById('saveStatus');
+    if (!statusSpan) return;
+    
+    statusSpan.textContent = '✅ Saved';
+    statusSpan.style.color = '#4CAF50';
+    
+    setTimeout(() => {
+        statusSpan.textContent = '● All Changes Saved';
+    }, 2000);
+}
+
+// Export all data as JSON files
+async function exportAllData() {
+    try {
+        const confirmExport = confirm(
+            '📥 This will download 9 JSON files.\n\n' +
+            '⚠️ IMPORTANT: After downloading, upload these files to your Hostinger "data" folder for changes to be visible to all users!\n\n' +
+            'Continue with export?'
+        );
+        
+        if (!confirmExport) return;
+
+        // Show progress
+        const statusSpan = document.getElementById('saveStatus');
+        if (statusSpan) {
+            statusSpan.textContent = '⏳ Exporting...';
+            statusSpan.style.color = '#FF9800';
+        }
+
+        await window.dataManager.exportAllData();
+        
+        if (statusSpan) {
+            statusSpan.textContent = '✅ Downloaded!';
+            statusSpan.style.color = '#4CAF50';
+            setTimeout(() => {
+                statusSpan.textContent = '● All Changes Saved';
+            }, 3000);
+        }
+        
+        alert(
+            '✅ All data exported successfully!\n\n' +
+            '📤 NEXT STEP: Upload these 9 JSON files to your Hostinger "data" folder:\n\n' +
+            '• drivers.json\n' +
+            '• teams.json\n' +
+            '• news.json\n' +
+            '• races.json\n' +
+            '• driver-standings.json\n' +
+            '• constructor-standings.json\n' +
+            '• completed-races.json\n' +
+            '• race-contributions.json\n' +
+            '• last-update.json\n\n' +
+            '💡 Once uploaded, all visitors will see your updates!'
+        );
+    } catch (error) {
+        console.error('Export failed:', error);
+        alert('❌ Export failed: ' + error.message);
+    }
+}
+
+// Form display functions
+function showAddRaceForm() {
+    editingRaceId = null; // Reset when opening fresh form
+    const modal = document.createElement('div');
+    modal.className = 'modal-backdrop';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h3>Add New Race</h3>
+            <div class="form-group">
+                <label>Round</label>
+                <input type="number" id="raceRound" required min="1">
+            </div>
+            <div class="form-group">
+                <label>Grand Prix Name</label>
+                <input type="text" id="grandPrixName" required placeholder="e.g., Italian Grand Prix">
+            </div>
+            <div class="form-group">
+                <label>Circuit</label>
+                <input type="text" id="raceCircuit" required placeholder="e.g., Monza Circuit">
+            </div>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="raceDate" required>
+            </div>
+            <div class="form-group">
+                <label>Flag (Emoji)</label>
+                <input type="text" id="raceFlag" placeholder="e.g., 🇮🇹">
+            </div>
+            <div class="form-group">
+                <label>Race Status</label>
+                <select id="raceStatus">
+                    <option value="upcoming">Upcoming</option>
+                    <option value="next">Next</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Winner (if completed)</label>
+                <input type="text" id="raceWinner" placeholder="e.g., Driver Name">
+            </div>
+            <button onclick="saveRaceData()">Save Race</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', handleEscape);
+}
+
+function closeModal() {
+    const modal = document.querySelector('.modal-backdrop');
+    if (modal) {
+        modal.remove();
+        document.removeEventListener('keydown', handleEscape);
+        editingRaceId = null; // Reset editing state when closing modal
+    }
+}
+
+function handleEscape(e) {
+    if (e.key === 'Escape') closeModal();
+}
+
+function showAddNewsForm() {
+    const html = `
+        <div id="newsForm" class="card">
+            <h3>Add News Article</h3>
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="newsTitle" required>
+            </div>
+            <div class="form-group">
+                <label>Content</label>
+                <textarea id="newsContent" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Image</label>
+                <input type="file" id="newsImage" accept="image/*">
+            </div>
+            <button onclick="saveNewsData()">Publish News</button>
+        </div>
+    `;
+    document.getElementById('newsList').insertAdjacentHTML('afterbegin', html);
+}
+
+// Save functions
+function saveRaceData() {
+    const races = JSON.parse(localStorage.getItem('calendar_races') || '[]');
+    
+    if (editingRaceId) {
+        // We're editing an existing race
+        const raceIndex = races.findIndex(r => r.id === editingRaceId);
+        if (raceIndex !== -1) {
+            // Keep existing completed status if it exists
+            const existingRace = races[raceIndex];
+            // Update existing race, keeping the same ID and preserving completed status
+            races[raceIndex] = {
+                id: editingRaceId,
+                round: document.getElementById('raceRound').value,
+                grandPrixName: document.getElementById('grandPrixName').value,
+                circuit: document.getElementById('raceCircuit').value,
+                date: document.getElementById('raceDate').value,
+                flag: document.getElementById('raceFlag').value,
+                status: document.getElementById('raceStatus').value,
+                winner: document.getElementById('raceWinner').value,
+                completed: existingRace.completed || false
+            };
+        }
+        editingRaceId = null; // Reset the editing ID
+    } else {
+        // We're adding a new race
+        const raceData = {
+            id: Date.now().toString(),
+            round: document.getElementById('raceRound').value,
+            grandPrixName: document.getElementById('grandPrixName').value,
+            circuit: document.getElementById('raceCircuit').value,
+            date: document.getElementById('raceDate').value,
+            flag: document.getElementById('raceFlag').value,
+            status: document.getElementById('raceStatus').value,
+            winner: document.getElementById('raceWinner').value,
+            completed: false
+        };
+        races.push(raceData);
+    }
+
+    localStorage.setItem('calendar_races', JSON.stringify(races));
+    
+    // Trigger storage event for other tabs/windows
+    window.dispatchEvent(new StorageEvent('storage', {
+        key: 'calendar_races',
+        newValue: JSON.stringify(races)
+    }));
+
+    // Show save notification
+    showSaveNotification();
+
+    // Close modal
+    closeModal();
+    
+    // Reload races to reflect changes
+    setTimeout(() => {
+        loadRaces();
+    }, 100);
+}
+
+function saveNewsData() {
+    const imageFile = document.getElementById('newsImage').files[0];
+    if (imageFile) {
+        window.adminAPI.handleImageUpload(imageFile, (imageData) => {
+            const newsData = {
+                title: document.getElementById('newsTitle').value,
+                content: document.getElementById('newsContent').value,
+                image: imageData
+            };
+            window.adminAPI.saveNews(newsData);
+            showSaveNotification();
+            loadNews();
+        });
+    } else {
+        const newsData = {
+            title: document.getElementById('newsTitle').value,
+            content: document.getElementById('newsContent').value
+        };
+        window.adminAPI.saveNews(newsData);
+        showSaveNotification();
+        loadNews();
+    }
+}
+
+// Load data functions
+function loadRaces() {
+    const races = JSON.parse(localStorage.getItem('calendar_races') || '[]');
+    const html = races.map(race => {
+        const statusClass = race.status === 'completed' ? 'status-badge completed' :
+                           race.status === 'upcoming' ? 'status-badge upcoming' :
+                           race.status === 'next' ? 'status-badge next' : 'status-badge';
+        return `
+        <div class="card">
+            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                <span class="round-cell">${race.round}</span>
+                ${race.flag ? `<span class="race-flag" style="margin-left: 0.5rem;">${race.flag}</span>` : ''}
+            </div>
+            <h3 class="race-name-cell">${race.grandPrixName}</h3>
+            <p class="circuit-name">${race.circuit}</p>
+            <p class="date-cell">${new Date(race.date).toLocaleDateString()}</p>
+            <span class="${statusClass}">${race.status}</span>
+            ${race.winner ? `<p class="winner-cell">Winner: ${race.winner}</p>` : ''}
+            <div class="card-actions">
+                <button onclick="editRace('${race.id}')">Edit</button>
+                <button onclick="deleteRace('${race.id}')">Delete</button>
+            </div>
+        </div>
+    `}).join('');
+    document.getElementById('racesList').innerHTML = html;
+}
+
+function loadNews() {
+    const news = JSON.parse(localStorage.getItem('news_data') || '[]');
+    const html = news.map(article => `
+        <div class="card">
+            ${article.image ? `<img src="${article.image}" alt="${article.title}">` : ''}
+            <h3>${article.title}</h3>
+            <p>${article.content}</p>
+            <small>Published: ${new Date(article.date).toLocaleDateString()}</small>
+            <div class="card-actions">
+                <button onclick="editNews('${article.id}')">Edit</button>
+                <button onclick="deleteNews('${article.id}')">Delete</button>
+            </div>
+        </div>
+    `).join('');
+    document.getElementById('newsList').innerHTML = html;
+}
+
+// Delete functions
+function deleteRace(id) {
+    if (confirm('Are you sure you want to delete this race?')) {
+        window.adminAPI.deleteRace(id);
+        loadRaces();
+    }
+}
+
+function deleteNews(id) {
+    if (confirm('Are you sure you want to delete this news article?')) {
+        window.adminAPI.deleteNews(id);
+        loadNews();
+    }
+}
+
+// Edit functions (simplified for now)
+function editRace(id) {
+    const races = JSON.parse(localStorage.getItem('calendar_races') || '[]');
+    const race = races.find(r => r.id === id);
+    if (race) {
+        showAddRaceForm(); // Create the form first
+        editingRaceId = id; // Then set the editing ID (after showAddRaceForm resets it)
+        // Update modal title to indicate editing
+        document.querySelector('.modal-content h3').textContent = 'Edit Race';
+        document.getElementById('raceRound').value = race.round;
+        document.getElementById('grandPrixName').value = race.grandPrixName;
+        document.getElementById('raceCircuit').value = race.circuit;
+        document.getElementById('raceDate').value = race.date;
+        document.getElementById('raceFlag').value = race.flag || '';
+        document.getElementById('raceStatus').value = race.status;
+        document.getElementById('raceWinner').value = race.winner || '';
+    }
+}
+
+function editNews(id) {
+    const news = JSON.parse(localStorage.getItem('news_data') || '[]');
+    const article = news.find(n => n.id === id);
+    if (article) {
+        showAddNewsForm();
+        document.getElementById('newsTitle').value = article.title;
+        document.getElementById('newsContent').value = article.content;
+    }
+}
+
+// Initialize data and load
+window.adminAPI.initializeData(); // Initialize all data
+loadRaces();
+loadNews();
+populateTrackSelect();
+
+// Map telemetry names to data-track string in your calendar
+const trackNameMapping = {
+  "Italy": "Monza Circuit",
+  "Italian": "Monza Circuit",
+  "Monza": "Monza Circuit",
+  "Japan": "Suzuka Circuit",
+  "Suzuka": "Suzuka Circuit",
+  "Bahrain": "Bahrain International Circuit",
+  "Austria": "Red Bull Ring",
+  "Spain": "Circuit de Barcelona-Catalunya",
+  "Great Britain": "Silverstone Circuit",
+  "Belgium": "Circuit de Spa-Francorchamps",
+  "Canada": "Circuit Gilles Villeneuve",
+  "Saudi Arabia": "Jeddah Corniche Circuit",
+  "Netherlands": "Circuit Zandvoort",
+  "Mexico": "Autódromo Hermanos Rodríguez",
+  "Brazil": "Autódromo José Carlos Pace",
+  "Abu Dhabi": "Yas Marina Circuit",
+  "United States": "Circuit of the Americas",
+  "Las Vegas": "Las Vegas Strip Circuit",
+  "Azerbaijan": "Baku City Circuit"
+  // add your full set here
+};
+const COMPLETED_STORAGE_KEY = 'completedRaces';
+
+function getCompleted() {
+  const val = localStorage.getItem(COMPLETED_STORAGE_KEY);
+  return val ? JSON.parse(val) : {};
+}
+function setCompleted(completed) {
+  localStorage.setItem(COMPLETED_STORAGE_KEY, JSON.stringify(completed));
+}
+function downloadCompleted() {
+  const completed = getCompleted();
+  const blob = new Blob([JSON.stringify(completed, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.download = 'completed_races.json';
+  a.href = url;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function clearCompletedRaces() {
+  localStorage.removeItem('completedRaces');
+  location.reload();
+}
+function mapTrackName(inputName) {
+  return trackNameMapping[inputName] || inputName || "Unknown";
+}
+
+// Populate track select from stored races (or a tracks list)
+function populateTrackSelect() {
+    const select = document.getElementById('trackSelect');
+    const races = JSON.parse(localStorage.getItem('calendar_races') || '[]');
+    select.innerHTML = '<option value="">-- Select track / race --</option>' +
+        races.map(r => `<option value="${r.circuit}">${r.grandPrixName}</option>`).join('');
+}
+
+// Global variable to store loaded telemetry data
+let loadedTelemetryData = null;
+
+// Helper function to find a race by track name
+function findRaceByTrack(trackName, races) {
+    return races.find(race => 
+        race.circuit === trackName || 
+        race.grandPrixName.includes(trackName) ||
+        trackName.includes(race.circuit)
+    );
+}
+
+// Preview telemetry data without processing
+function previewTelemetryFile(file) {
+    if (!file) {
+        alert('Please choose a telemetry JSON file.');
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            loadedTelemetryData = data; // Store for later processing
+            displayTelemetryData(data);
+            // Show the results table and add custom driver button
+            document.getElementById('resultsTable').style.display = 'table';
+            document.getElementById('addCustomDriverDiv').style.display = 'block';
+            document.getElementById('status').textContent = 'File loaded. Review the results, select a track, and click "Upload & Process" when ready.';
+        } catch (err) {
+            alert('Invalid JSON file.');
+        }
+    };
+    reader.readAsText(file);
+}
+
+// Generic telemetry file processor that associates the upload with a selected track name
+function processTelemetryFile(overrideTrackName) {
+    if (!loadedTelemetryData) {
+        alert('Please preview a telemetry file first.');
+        return;
+    }
+    
+    try {
+        const mappedTrack = overrideTrackName;
+
+        // Mark completed map and persist
+        const completed = getCompleted();
+        completed[mappedTrack] = true;
+        setCompleted(completed);
+        document.getElementById('status').textContent = `Marked track "${mappedTrack}" as completed. Reload calendar.html to see updates.`;
+
+        // Build finalResults from the ACTUAL TABLE (after user edits/reorders)
+        let finalResults = [];
+        const tbody = document.getElementById('resultsTbody');
+        const rows = tbody.querySelectorAll('tr');
+        
+        rows.forEach((row, index) => {
+            const driverName = row.cells[0].textContent.trim();
+            const teamName = row.cells[1].textContent.trim();
+            const position = index + 1; // Position is determined by row order in table
+            
+            if (driverName && teamName) {
+                finalResults.push({
+                    name: driverName,
+                    team: teamName,
+                    position: position
+                });
+            }
+        });
+        
+        if (finalResults.length === 0) {
+            alert('No results found in the table. Please load data first.');
+            return;
+        }
+
+            // Update calendar_races and completedRaces
+            try {
+                const races = JSON.parse(localStorage.getItem('calendar_races') || '[]');
+                const matchedRace = findRaceByTrack(mappedTrack, races);
+
+                if (matchedRace) {
+                    // Update calendar_races
+                    matchedRace.completed = true;
+                    matchedRace.status = 'completed';
+                    if (finalResults[0]) {
+                        matchedRace.winner = finalResults[0].name;
+                    }
+                    localStorage.setItem('calendar_races', JSON.stringify(races));
+                    
+                    // Trigger storage event for calendar.html to update
+                    window.dispatchEvent(new StorageEvent('storage', {
+                        key: 'calendar_races',
+                        newValue: JSON.stringify(races)
+                    }));
+
+                    // Update completedRaces
+                    const completed = getCompleted();
+                    completed[matchedRace.circuit] = {
+                        completed: true,
+                        winner: finalResults[0] ? finalResults[0].name : 'Unknown',
+                        team: finalResults[0] ? finalResults[0].team : 'Unknown',
+                        timestamp: new Date().toISOString()
+                    };
+                    setCompleted(completed);
+                    
+                    // Trigger storage event for completedRaces too
+                    window.dispatchEvent(new StorageEvent('storage', {
+                        key: 'completedRaces',
+                        newValue: JSON.stringify(completed)
+                    }));
+                } else {
+                    console.warn('Could not find matching race in calendar for track:', mappedTrack);
+                }
+            } catch (e) {
+                console.error('Error updating race completion:', e);
+                document.getElementById('status').textContent = 
+                    'Error updating race completion. Results processed but calendar may not be updated.';
+            }
+
+            // Update standings and record contributions so we can remove them later
+            updateStandingsFromTelemetry(finalResults, mappedTrack);
+            
+            // Update the standings last update timestamp with current date/time
+            const now = new Date();
+            localStorage.setItem('standingsLastUpdate', now.toISOString());
+            
+            // Format the date for display
+            const formattedDate = now.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            populateTrackSelect();
+            
+            // Clear the loaded data after processing
+            loadedTelemetryData = null;
+            document.getElementById('fileInput').value = ''; // Clear file input
+            document.getElementById('resultsTable').style.display = 'none'; // Hide table
+            document.getElementById('addCustomDriverDiv').style.display = 'none'; // Hide add driver button
+            
+            // Show success message with timestamp
+            document.getElementById('status').textContent = 
+                `✓ Successfully processed results for ${mappedTrack}. Standings updated on ${formattedDate}.`;
+            
+            // Show save notification
+            showSaveNotification();
+    } catch (err) {
+        console.error('Processing error:', err);
+        alert('Error processing telemetry: ' + err.message);
+        document.getElementById('status').textContent = 'Error: ' + err.message;
+    }
+}
+
+// Auto-preview when file is selected (shows table immediately)
+document.getElementById('fileInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        previewTelemetryFile(file);
+    }
+});
+
+// Upload & Process button to save the data
+document.getElementById('uploadForTrackBtn').addEventListener('click', () => {
+    const select = document.getElementById('trackSelect');
+    const selectedTrack = select.value;
+    const file = document.getElementById('fileInput').files[0];
+    
+    if (!file) {
+        alert('Please select a telemetry JSON file first.');
+        return;
+    }
+    
+    if (!selectedTrack) {
+        alert('Please select a track before processing.');
+        return;
+    }
+    
+    if (!loadedTelemetryData) {
+        alert('No data loaded. Please select a file first.');
+        return;
+    }
+    
+    if (!confirm(`Process and save results for ${selectedTrack}? This will update standings and mark the race as completed.`)) {
+        return;
+    }
+    processTelemetryFile(selectedTrack);
+});
+
+// delete buttons
+document.getElementById('deleteTrackPointsBtn').addEventListener('click', () => {
+    const select = document.getElementById('trackSelect');
+    const selectedTrack = select.value;
+    if (!selectedTrack) return alert('Select a track to delete its points.');
+    if (!confirm(`Delete all points contributed by track: ${selectedTrack}? This will subtract the points from standings.`)) return;
+    deleteTrackPoints(selectedTrack);
+});
+
+document.getElementById('deleteAllPointsBtn').addEventListener('click', () => {
+    if (!confirm('Delete points for ALL tracks (this will clear all standings and recorded contributions)?')) return;
+    deleteAllPoints();
+});
+
+function displayTelemetryData(data) {
+  const tbody = document.getElementById('resultsTbody');
+  tbody.innerHTML = '';
+  if (!data['classification-data'] || !Array.isArray(data['classification-data'])) {
+    tbody.innerHTML = '<tr><td colspan="9">No classification-data found in JSON.</td></tr>';
+    return;
+  }
+  // Sort by position ascending
+  const sortedDrivers = data['classification-data'].slice().sort((a, b) => {
+    const posA = parseInt(a['track-position'] || a['position'] || 99);
+    const posB = parseInt(b['track-position'] || b['position'] || 99);
+    return posA - posB;
+  });
+  sortedDrivers.forEach((driver, index) => {
+    const name = driver['driver-name'] || 'N/A';
+    const team = driver['team'] || 'N/A';
+    const topSpeed = driver['top-speed-kmph'] || 'N/A';
+    const position = index + 1; // Update position based on sorted order
+    let bestLapStr = 'N/A', s1 = 'N/A', s2 = 'N/A', s3 = 'N/A';
+    const sessionHistory = driver['session-history'];
+    if (sessionHistory && sessionHistory['lap-history-data'] && sessionHistory['lap-history-data'].length > 0) {
+      const laps = sessionHistory['lap-history-data'].filter(lap => lap['lap-valid-bit-flags'] > 0);
+      if(laps.length > 0){
+        let bestLap = laps.reduce((best, lap) => lap['lap-time-in-ms'] < best['lap-time-in-ms'] ? lap : best, laps[0]);
+        bestLapStr = bestLap['lap-time-str'] || 'N/A';
+        s1 = bestLap['sector-1-time-str'] || 'N/A';
+        s2 = bestLap['sector-2-time-str'] || 'N/A';
+        s3 = bestLap['sector-3-time-str'] || 'N/A';
+      }
+    }
+    const tr = document.createElement('tr');
+    tr.draggable = true;
+    tr.innerHTML = `<td class="editable">${name}</td><td class="editable">${team}</td><td class="editable">${bestLapStr}</td><td class="editable">${s1}</td><td class="editable">${s2}</td><td class="editable">${s3}</td><td class="editable">${topSpeed}</td><td>${position}</td><td><button onclick="deleteRow(this)">Delete</button></td>`;
+    tbody.appendChild(tr);
+  });
+  // Add drag and drop functionality
+  addDragAndDrop();
+  // Add double-click editing
+  addCellEditing();
+}
+
+function addDragAndDrop() {
+  const tbody = document.getElementById('resultsTbody');
+  let draggedRow = null;
+
+  tbody.addEventListener('dragstart', (e) => {
+    draggedRow = e.target.closest('tr');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+
+  tbody.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const targetRow = e.target.closest('tr');
+    if (targetRow && targetRow !== draggedRow) {
+      const rect = targetRow.getBoundingClientRect();
+      const midpoint = rect.top + rect.height / 2;
+      if (e.clientY < midpoint) {
+        tbody.insertBefore(draggedRow, targetRow);
+      } else {
+        tbody.insertBefore(draggedRow, targetRow.nextSibling);
+      }
+    }
+  });
+
+  tbody.addEventListener('drop', (e) => {
+    e.preventDefault();
+    // Update positions after drop
+    updatePositions();
+  });
+
+  tbody.addEventListener('dragend', () => {
+    draggedRow = null;
+  });
+}
+
+function updatePositions() {
+  const rows = document.querySelectorAll('#resultsTbody tr');
+  rows.forEach((row, index) => {
+    const positionCell = row.cells[7]; // Position is the 8th cell (index 7)
+    positionCell.textContent = index + 1;
+  });
+}
+
+function addCellEditing() {
+  const editableCells = document.querySelectorAll('.editable');
+  editableCells.forEach(cell => {
+    cell.addEventListener('dblclick', function() {
+      const currentValue = this.textContent;
+      const input = document.createElement('input');
+      input.value = currentValue;
+      input.style.width = '100%';
+      this.innerHTML = '';
+      this.appendChild(input);
+      input.focus();
+      input.addEventListener('blur', () => {
+        this.textContent = input.value;
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          this.textContent = input.value;
+        }
+      });
+    });
+  });
+}
+
+function deleteRow(button) {
+  const row = button.closest('tr');
+  row.remove();
+  updatePositions();
+}
+
+function addCustomDriver() {
+  const tbody = document.getElementById('resultsTbody');
+  const tr = document.createElement('tr');
+  tr.draggable = true;
+  tr.innerHTML = `<td class="editable">New Driver</td><td class="editable">New Team</td><td class="editable">N/A</td><td class="editable">N/A</td><td class="editable">N/A</td><td class="editable">N/A</td><td class="editable">N/A</td><td>N/A</td><td><button onclick="deleteRow(this)">Delete</button></td>`;
+  tbody.appendChild(tr);
+  updatePositions();
+  addCellEditing();
+  addDragAndDrop();
+}
+
+// === STANDINGS LOGIC === //
+function getRaceContributions() {
+    return JSON.parse(localStorage.getItem('raceContributions') || '{}');
+}
+function setRaceContributions(obj) {
+    localStorage.setItem('raceContributions', JSON.stringify(obj));
+}
+
+/**
+ * Update standings and record per-track contributions so we can subtract later.
+ * finalResults: array [{name, team, position}]
+ * mappedTrack: string to associate this set of contributions with
+ */
+function updateStandingsFromTelemetry(finalResults, mappedTrack) {
+    let driverStandings = JSON.parse(localStorage.getItem('driverStandings') || '{}');
+    let constructorStandings = JSON.parse(localStorage.getItem('constructorStandings') || '{}');
+    const pointsTable = [25,18,15,12,10,8,6,4,2,1];
+
+    const contributions = [];
+    finalResults.forEach((entry, i) => {
+        if(!entry.name || !entry.team) return;
+        const pointsAwarded = (i < pointsTable.length) ? pointsTable[i] : 0;
+
+        // DRIVERS
+        if(!driverStandings[entry.name]) {
+            driverStandings[entry.name] = { name: entry.name, team: entry.team, points: 0, wins: 0, podiums: 0, appearances: 0 };
+        }
+        let driver = driverStandings[entry.name];
+        driver.team = entry.team;
+        driver.points = Number(driver.points || 0) + pointsAwarded;
+        if(entry.position === 1 || i === 0) driver.wins = Number(driver.wins || 0) + (entry.position === 1 || i === 0 ? 1 : 0);
+        if((entry.position !== undefined && entry.position <= 3) || i < 3) driver.podiums = Number(driver.podiums || 0) + 1;
+        driver.appearances = Number(driver.appearances || 0) + 1;
+
+        // CONSTRUCTORS
+        if(!constructorStandings[entry.team]) {
+            constructorStandings[entry.team] = { name: entry.team, points: 0, wins: 0, podiums: 0 };
+        }
+        constructorStandings[entry.team].points = Number(constructorStandings[entry.team].points || 0) + pointsAwarded;
+        if(entry.position === 1 || i === 0) constructorStandings[entry.team].wins = Number(constructorStandings[entry.team].wins || 0) + 1;
+        if((entry.position !== undefined && entry.position <= 3) || i < 3) constructorStandings[entry.team].podiums = Number(constructorStandings[entry.team].podiums || 0) + 1;
+
+        contributions.push({ name: entry.name, team: entry.team, points: pointsAwarded, position: (entry.position || (i+1)) });
+    });
+
+    // persist updated standings
+    localStorage.setItem('driverStandings', JSON.stringify(driverStandings));
+    localStorage.setItem('constructorStandings', JSON.stringify(constructorStandings));
+
+    // record contributions by mappedTrack so we can reverse them later
+    if (mappedTrack) {
+        const allContrib = getRaceContributions();
+        allContrib[mappedTrack] = contributions;
+        setRaceContributions(allContrib);
+    }
+}
+
+// Delete contributions for a single track and subtract from standings
+function deleteTrackPoints(trackName) {
+    const allContrib = getRaceContributions();
+    if (!allContrib[trackName]) {
+        alert('No recorded contributions found for this track.');
+        return;
+    }
+    const contributions = allContrib[trackName];
+
+    let driverStandings = JSON.parse(localStorage.getItem('driverStandings') || '{}');
+    let constructorStandings = JSON.parse(localStorage.getItem('constructorStandings') || '{}');
+
+    contributions.forEach(c => {
+        if(driverStandings[c.name]) {
+            driverStandings[c.name].points = Math.max(0, Number(driverStandings[c.name].points || 0) - Number(c.points || 0));
+            driverStandings[c.name].appearances = Math.max(0, Number(driverStandings[c.name].appearances || 0) - 1);
+            if(c.position === 1) driverStandings[c.name].wins = Math.max(0, Number(driverStandings[c.name].wins || 0) - 1);
+            if(c.position <= 3) driverStandings[c.name].podiums = Math.max(0, Number(driverStandings[c.name].podiums || 0) - 1);
+        }
+        if(constructorStandings[c.team]) {
+            constructorStandings[c.team].points = Math.max(0, Number(constructorStandings[c.team].points || 0) - Number(c.points || 0));
+            if(c.position === 1) constructorStandings[c.team].wins = Math.max(0, Number(constructorStandings[c.team].wins || 0) - 1);
+            if(c.position <= 3) constructorStandings[c.team].podiums = Math.max(0, Number(constructorStandings[c.team].podiums || 0) - 1);
+        }
+    });
+
+    // Persist updated standings and remove contributions record
+    localStorage.setItem('driverStandings', JSON.stringify(driverStandings));
+    localStorage.setItem('constructorStandings', JSON.stringify(constructorStandings));
+    delete allContrib[trackName];
+    setRaceContributions(allContrib);
+
+    // Also mark track as not completed
+    const completed = getCompleted();
+    if (completed[trackName]) {
+        delete completed[trackName];
+        setCompleted(completed);
+    }
+
+    // Update calendar_races to mark race as upcoming
+    try {
+        const races = JSON.parse(localStorage.getItem('calendar_races') || '[]');
+        const matchedRace = races.find(race => race.circuit === trackName);
+        if (matchedRace) {
+            matchedRace.completed = false;
+            matchedRace.status = 'upcoming';
+            matchedRace.winner = '';
+            localStorage.setItem('calendar_races', JSON.stringify(races));
+        }
+    } catch (e) {
+        console.error('Error updating calendar race status:', e);
+    }
+
+    document.getElementById('status').textContent = `Removed contributions for ${trackName} and updated standings. Race status reset to upcoming.`;
+    
+    // Show save notification
+    showSaveNotification();
+    
+    loadRaces(); // Refresh the race list display
+}
+
+// Delete everything (all contributions and standings)
+function deleteAllPoints() {
+    // clear standings and contributions
+    localStorage.removeItem('driverStandings');
+    localStorage.removeItem('constructorStandings');
+    localStorage.removeItem('raceContributions');
+    // clear completed map
+    localStorage.removeItem(COMPLETED_STORAGE_KEY);
+    
+    // Update all calendar_races to mark as upcoming
+    try {
+        const races = JSON.parse(localStorage.getItem('calendar_races') || '[]');
+        races.forEach(race => {
+            race.completed = false;
+            race.status = 'upcoming';
+            race.winner = '';
+        });
+        localStorage.setItem('calendar_races', JSON.stringify(races));
+    } catch (e) {
+        console.error('Error updating calendar race statuses:', e);
+    }
+    
+    document.getElementById('status').textContent = 'All track contributions and standings cleared. All races reset to upcoming.';
+    
+    // Show save notification
+    showSaveNotification();
+    
+    loadRaces(); // Refresh the race list display
+}
+</script>
+</body>
+</html>

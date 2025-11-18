@@ -1,0 +1,72 @@
+[
+    {
+        "id": "1",
+        "name": "Red Bull Racing",
+        "code": "RB",
+        "color": "#3671C6",
+        "logo": "./static/img/redbull-logo.png"
+    },
+    {
+        "id": "2",
+        "name": "Ferrari",
+        "code": "FE",
+        "color": "#E10600",
+        "logo": "./static/img/ferrari-logo.png"
+    },
+    {
+        "id": "3",
+        "name": "Mercedes",
+        "code": "ME",
+        "color": "#00D2BE",
+        "logo": "./static/img/mercedes-logo.png"
+    },
+    {
+        "id": "4",
+        "name": "McLaren",
+        "code": "MC",
+        "color": "#FF8700",
+        "logo": "./static/img/mclaren-logo.png"
+    },
+    {
+        "id": "5",
+        "name": "Aston Martin",
+        "code": "AM",
+        "color": "#006F62",
+        "logo": "./static/img/astonmartin-logo.png"
+    },
+    {
+        "id": "6",
+        "name": "Williams Racing",
+        "code": "WR",
+        "color": "#E10600",
+        "logo": "./static/img/williams-logo.png"
+    },
+    {
+        "id": "7",
+        "name": "Racing Bulls",
+        "code": "RB",
+        "color": "#3671C6",
+        "logo": "./static/img/racingbulls-logo.png"
+    },
+    {
+        "id": "8",
+        "name": "Kick Sauber",
+        "code": "KS",
+        "color": "#00D2BE",
+        "logo": "./static/img/kicksauber-logo.png"
+    },
+    {
+        "id": "9",
+        "name": "MoneyGram Haas F1",
+        "code": "HS",
+        "color": "#00D2BE",
+        "logo": "./static/img/haas-logo.png"
+    },
+    {
+        "id": "10",
+        "name": "Alpine F1",
+        "code": "AP",
+        "color": "#00D2BE",
+        "logo": "./static/img/alpine-logo.png"
+    }
+]

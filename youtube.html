@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 League Hub - YouTube Channels</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0A0A0F;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(225, 6, 0, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #E10600;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            padding: 0.5rem 0;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #E10600, #ff4500);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .nav-menu a:hover::before,
+        .nav-menu a.active::before {
+            width: 100%;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #E10600;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom right, #E10600, #15151E, #0A0A0F);
+        }
+
+        .animated-stripes {
+            position: absolute;
+            inset: 0;
+            opacity: 0.2;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            background-size: 200% 200%;
+            animation: moveStripes 20s linear infinite;
+        }
+
+        @keyframes moveStripes {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        .racing-lines-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .racing-line {
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(to right, transparent, #E10600, transparent);
+            animation: racingLine 3s ease-in-out infinite;
+        }
+
+        .racing-line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .racing-line:nth-child(2) { top: 40%; animation-delay: 0.5s; }
+        .racing-line:nth-child(3) { top: 60%; animation-delay: 1s; }
+        .racing-line:nth-child(4) { top: 80%; animation-delay: 1.5s; }
+
+        @keyframes racingLine {
+            0% { transform: translateX(-100%); opacity: 0; }
+            25% { opacity: 1; }
+            75% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+
+        .glow-orb-1 {
+            position: absolute;
+            width: 384px;
+            height: 384px;
+            background: #E10600;
+            border-radius: 50%;
+            filter: blur(96px);
+            opacity: 0.2;
+            top: 10%;
+            left: 10%;
+            animation: floatOrb1 10s ease-in-out infinite;
+        }
+
+        .glow-orb-2 {
+            position: absolute;
+            width: 384px;
+            height: 384px;
+            background: #FFD700;
+            border-radius: 50%;
+            filter: blur(96px);
+            opacity: 0.1;
+            bottom: 10%;
+            right: 10%;
+            animation: floatOrb2 12s ease-in-out infinite;
+        }
+
+        @keyframes floatOrb1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(100px, 50px) scale(1.2); }
+        }
+
+        @keyframes floatOrb2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-100px, 100px) scale(1.3); }
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .page-title {
+            font-size: 4rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title .gradient-text {
+            background: linear-gradient(to right, #FFD700, white, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.3rem;
+            color: #C0C0C8;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-fade {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 128px;
+            background: linear-gradient(to top, #0A0A0F, transparent);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .main-content {
+            padding: 4rem 0;
+        }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-line {
+            width: 4px;
+            height: 48px;
+            background: linear-gradient(to bottom, #FFD700, transparent);
+            border-radius: 9999px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: -0.025em;
+        }
+
+        .section-subtitle {
+            color: #C0C0C8;
+            margin-top: 0.25rem;
+        }
+
+        /* YouTube Channels Grid */
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+        }
+
+        .channel-card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(225, 6, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            animation: fadeIn 0.5s ease-out both;
+        }
+
+        .channel-card:nth-child(1) { animation-delay: 0.1s; }
+        .channel-card:nth-child(2) { animation-delay: 0.15s; }
+        .channel-card:nth-child(3) { animation-delay: 0.2s; }
+        .channel-card:nth-child(4) { animation-delay: 0.25s; }
+        .channel-card:nth-child(5) { animation-delay: 0.3s; }
+        .channel-card:nth-child(6) { animation-delay: 0.35s; }
+        .channel-card:nth-child(7) { animation-delay: 0.4s; }
+        .channel-card:nth-child(8) { animation-delay: 0.45s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .channel-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(225, 6, 0, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .channel-card:hover::before {
+            left: 100%;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(225, 6, 0, 0.3);
+            border-color: rgba(225, 6, 0, 0.5);
+        }
+
+        .channel-banner {
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(135deg, #E10600, #8b0000);
+            position: relative;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .channel-banner::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .youtube-icon {
+            font-size: 5rem;
+            z-index: 1;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .channel-info {
+            padding: 2rem;
+        }
+
+        .channel-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .channel-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid #E10600;
+            overflow: hidden;
+        }
+
+        .channel-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .channel-details {
+            flex: 1;
+        }
+
+        .channel-name {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .driver-name-channel {
+            color: #888;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .team-color-mini {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .channel-stats {
+            display: flex;
+            gap: 2rem;
+            padding: 1rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .channel-stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #E10600;
+            display: block;
+        }
+
+        .stat-text {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .channel-description {
+            color: #aaa;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .channel-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .subscribe-btn {
+            flex: 1;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .subscribe-btn:hover {
+            background: linear-gradient(135deg, #FF1a1a, #E10600);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.4);
+        }
+
+        .visit-btn {
+            flex: 1;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        .visit-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #E10600;
+            color: #E10600;
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 3rem 0 1.5rem;
+            border-top: 1px solid rgba(225, 6, 0, 0.3);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: #888;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                height: 300px;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .page-subtitle {
+                font-size: 1rem;
+            }
+
+            .channels-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .channel-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body style="zoom: 80%;">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">F1 LEAGUE</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="standings.html">Standings</a></li>
+                <li><a href="rules.html">Rules</a></li>
+                <li><a href="drivers.html">Drivers</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="youtube.html" class="active">Youtube</a></li>
+                <li><a href="news.html">news</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="animated-stripes"></div>
+        
+        <div class="racing-lines-container">
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+        </div>
+
+        <div class="glow-orb-1"></div>
+        <div class="glow-orb-2"></div>
+
+        <div class="hero-content">
+            <h1 class="page-title">
+                <span class="gradient-text">YOUTUBE</span> CHANNELS
+            </h1>
+            <p class="page-subtitle">Subscribe to your favorite drivers' channels</p>
+        </div>
+
+        <div class="hero-fade"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-content" style="padding-top: 10px;">
+        <div class="section-header">
+            <div class="section-line"></div>
+            <div>
+                <h2 class="section-title">🎥 Driver Content Creators</h2>
+                <p class="section-subtitle">Follow the action on and off the track</p>
+            </div>
+        </div>
+
+        <div class="channels-grid" style="margin-top: 50px;">
+            <!-- Channel 1 -->
+            <div class="channel-card">
+                <div class="channel-banner" style="background-image: url('https://yt3.googleusercontent.com/Vx2lau1-ClgMMu29b-V5W6Oj4ab0esvJt-2UFQV2ev-dszA5CQPeDPVdp9uhcHJw72-wmCOL07w=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj');">
+                </div>
+                <div class="channel-info">
+                    <div class="channel-header">
+                        <div class="channel-avatar">
+                            <img src="https://yt3.googleusercontent.com/h9NtAyG6wSVjx2DfqJRQzonf3bYTqrGQKkxSLpMx26fmBWW1MGi0_Fml3ajfts0hBsWs7cfAbsQ=s160-c-k-c0x00ffffff-no-rj" alt="Alex Martinez">
+                        </div>
+                        <div class="channel-details">
+                            <h3 class="channel-name">Kuntucky_Yt</h3>
+                            <p class="driver-name-channel">
+                                <span class="team-color-mini" style="background: #3dc636;"></span>
+                                Kick Sauber
+                            </p>
+                        </div>
+                    </div>
+                    <div class="channel-stats">
+                        <div class="channel-stat">
+                            <span class="stat-number">695</span>
+                            <span class="stat-text">Subscribers</span>
+                        </div>
+                        <div class="channel-stat">
+                            <span class="stat-number">367</span>
+                            <span class="stat-text">Videos</span>
+                        </div>
+                    </div>
+                    <p class="channel-description">
+                        I’m a passionate gamer from Tamil Nadu, sharing F1 25 gameplay, career mode, live streams, and racing challenges — all with a Tamil twist. 💚                    </p>
+                    <div class="channel-buttons">
+                        <a href="#" class="visit-btn" onclick="window.location.href='https://www.youtube.com/@Kentucky_YT19'; return false;">Visit Channel</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channel 2 -->
+            <div class="channel-card">
+                <div class="channel-banner" style="background-image: url('https://yt3.googleusercontent.com/dKZ3YXAfrfWNGVtL38UB_fAJ62yZzKFzyPFvxdORQhhP60R7mvNJTd6FMnIgAjlQDY962RXy=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj');">
+                </div>
+                <div class="channel-info">
+                    <div class="channel-header">
+                        <div class="channel-avatar">
+                            <img src="https://yt3.googleusercontent.com/pzGQQwFuliVvaTIGc1R1f1j28-YbZ0aiE_CspX46_vKSF9lCGx9-QjnO5WhbCEjJTY2ajotbLmA=s160-c-k-c0x00ffffff-no-rj" alt="Jordan Smith">
+                        </div>
+                        <div class="channel-details">
+                            <h3 class="channel-name">Majunu</h3>
+                            <p class="driver-name-channel">
+                                <span class="team-color-mini" style="background: #00D2BE;"></span>
+                                Mercedes Benz
+                            </p>
+                        </div>
+                    </div>
+                    <div class="channel-stats">
+                        <div class="channel-stat">
+                            <span class="stat-number">391</span>
+                            <span class="stat-text">Subscribers</span>
+                        </div>
+                        <div class="channel-stat">
+                            <span class="stat-number">108</span>
+                            <span class="stat-text">Videos</span>
+                        </div>
+                    </div>
+                    <p class="channel-description">
+                        Hello, friends, I'm Majunu. I'll be playing and posting the gaming content. Do not forget to support, like, and share this channel.
+                    </p>
+                    <div class="channel-buttons">
+                        <a href="#" class="visit-btn" onclick="window.location.href='https://www.youtube.com/@therealmajunu'; return false;">Visit Channel</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channel 3 -->
+            <div class="channel-card">
+                <div class="channel-banner" style="background-image: url('https://yt3.googleusercontent.com/8hevX2FIvH6KsQTViOZznA-h0YCk6cSGvIXJblD0mtmsEp1-rcKN6h-H4DAZCJxKgLEJVgNYU_U=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj');">
+                </div>
+                <div class="channel-info">
+                    <div class="channel-header">
+                        <div class="channel-avatar">
+                            <img src="https://yt3.googleusercontent.com/CWS4XQ3RKWfW-gmkKtvvImhBSNguht3Yy8-MbVvhSBXZJVVBhGnT-MGhdtMtM4QXSIZb2a0RPQ=s160-c-k-c0x00ffffff-no-rj" alt="Sam Wilson">
+                        </div>
+                        <div class="channel-details">
+                            <h3 class="channel-name">Simman F1 Zone</h3>
+                            <p class="driver-name-channel">
+                                <span class="team-color-mini" style="background: #e32929;"></span>
+                                Ferrari
+                            </p>
+                        </div>
+                    </div>
+                    <div class="channel-stats">
+                        <div class="channel-stat">
+                            <span class="stat-number">81</span>
+                            <span class="stat-text">Subscribers</span>
+                        </div>
+                        <div class="channel-stat">
+                            <span class="stat-number">39</span>
+                            <span class="stat-text">Videos</span>
+                        </div>
+                    </div>
+                    <p class="channel-description">
+                        Sim racing thrills from F1 and beyond. Drivers' Champion - KFC League Season 2 Constructor's Champion - Williams - KFC League Season 2</p>
+                    <div class="channel-buttons">
+                        <a href="#" class="visit-btn" onclick="window.location.href='https://www.youtube.com/@SimmanF1Zone'; return false;">Visit Channel</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channel 4 -->
+            <div class="channel-card">
+                <div class="channel-banner" style="background-image: url('https://yt3.googleusercontent.com/MjD0z_ih25_WbkWP4KxPH8zBL_7tYS9eymvsFuopsaT3tr4yzp_6HjV9KzRwljM4aN5Nk9XyhyI=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj');">
+                </div>
+                <div class="channel-info">
+                    <div class="channel-header">
+                        <div class="channel-avatar">
+                            <img src="https://yt3.googleusercontent.com/C1hH8Ctm8PWlWFDxlRb_6jxhKJir94l8c30DoVXfVBn7xZDfNUrNPCYlkE8JMgrQfQ40A2EIUg=s160-c-k-c0x00ffffff-no-rj" alt="Chris Johnson">
+                        </div>
+                        <div class="channel-details">
+                            <h3 class="channel-name">Nightfurykar</h3>
+                            <p class="driver-name-channel">
+                                <span class="team-color-mini" style="background: #00D2BE;"></span>
+                                Mercedes
+                            </p>
+                        </div>
+                    </div>
+                    <div class="channel-stats">
+                        <div class="channel-stat">
+                            <span class="stat-number">25</span>
+                            <span class="stat-text">Subscribers</span>
+                        </div>
+                        <div class="channel-stat">
+                            <span class="stat-number">1</span>
+                            <span class="stat-text">Videos</span>
+                        </div>
+                    </div>
+                    <p class="channel-description">
+                        Just a guy who loves racing. Racing with friends, creating moments, and keeping it real. Catch my F1 live streams — let’s enjoy the chaos together!
+                    </p>
+                    <div class="channel-buttons">
+                        <a href="#" class="visit-btn" onclick="window.location.href='https://youtube.com/@karmughilane26'; return false;">Visit Channel</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channel 5 -->
+            <div class="channel-card">
+                <div class="channel-banner" style="background-image: url('https://yt3.googleusercontent.com/zA4LNwp8Ns2-6HH18Vx66SmvjypXI8p2M_V-MpPupq8jwNXj0SPG2S3r__vOyeSwiVKC1Jd-=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj');">
+                </div>
+                <div class="channel-info">
+                    <div class="channel-header">
+                        <div class="channel-avatar">
+                            <img src="https://yt3.googleusercontent.com/5eFlI4DfwMqfQTaDJFXM2Ud9R95ed2TILnh4JynUjIFbE8lI3Tx2BL_szbAy4vioKW3IElu_=s160-c-k-c0x00ffffff-no-rj" alt="Taylor Brown">
+                        </div>
+                        <div class="channel-details">
+                            <h3 class="channel-name">Tamil Gaming Doctor</h3>
+                            <p class="driver-name-channel">
+                                <span class="team-color-mini" style="background: #3671C6;"></span>
+                                RedBull Racing
+                            </p>
+                        </div>
+                    </div>
+                    <div class="channel-stats">
+                        <div class="channel-stat">
+                            <span class="stat-number">184</span>
+                            <span class="stat-text">Subscribers</span>
+                        </div>
+                        <div class="channel-stat">
+                            <span class="stat-number">75</span>
+                            <span class="stat-text">Videos</span>
+                        </div>
+                    </div>
+                    <p class="channel-description">
+                        Hi, here to tell you about myself, just an average gamer looking to share my gameplay with the rest of the you and have fun.</p>
+                    <div class="channel-buttons">
+                        <a href="#" class="visit-btn" onclick="window.location.href='https://www.youtube.com/@Tamilgamingdoctor'; return false;">Visit Channel</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channel 6 -->
+            <div class="channel-card">
+                <div class="channel-banner" style="background-image: url('https://yt3.googleusercontent.com/Skeq6e1piw31Th2qX5sZJF8pUbdz9wxmW5BWQfsRrFXUB3zOVxlFndCOGC7ulTdkatJ7j9PK=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj');">
+                </div>
+                <div class="channel-info">
+                    <div class="channel-header">
+                        <div class="channel-avatar">
+                            <img src="https://yt3.googleusercontent.com/qkp8GyAA6V-VzJ04piosCSSv94QV7xyCjtnjLRMnIXvr9XrOPY2Tk2ZPwEEY3PVtviTBMpyMde8=s160-c-k-c0x00ffffff-no-rj" alt="Jamie Lee">
+                        </div>
+                        <div class="channel-details">
+                            <h3 class="channel-name">SpartanGamer</h3>
+                            <p class="driver-name-channel">
+                                <span class="team-color-mini" style="background: #00D2BE;"></span>
+                                Alpine F1
+                            </p>
+                        </div>
+                    </div>
+                    <div class="channel-stats">
+                        <div class="channel-stat">
+                            <span class="stat-number">39</span>
+                            <span class="stat-text">Subscribers</span>
+                        </div>
+                        <div class="channel-stat">
+                            <span class="stat-number">13</span>
+                            <span class="stat-text">Videos</span>
+                        </div>
+                    </div>
+                    <p class="channel-description">
+                        Welcome to Spartan Gamer! Dive into thrilling adventures and epic gameplay as we explore the worlds of action, sports, and strategy.</p>
+                    <div class="channel-buttons">
+                        <a href="#" class="visit-btn" onclick="window.location.href='https://www.youtube.com/@SpartanGamer24'; return false;">Visit Channel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2025 F1 25 League Championship. All rights reserved.</p>
+            <p>Powered by F1 25 Game | EA Sports</p>
+        </div>
+    </footer>
+</body>
+</html>

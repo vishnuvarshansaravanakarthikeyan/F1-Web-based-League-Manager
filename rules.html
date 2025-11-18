@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 League Hub - Rules & Regulations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0A0A0F;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(225, 6, 0, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #E10600;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            padding: 0.5rem 0;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #E10600, #ff4500);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .nav-menu a:hover::before,
+        .nav-menu a.active::before {
+            width: 100%;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #E10600;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom right, #E10600, #15151E, #0A0A0F);
+        }
+
+        .animated-stripes {
+            position: absolute;
+            inset: 0;
+            opacity: 0.2;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            background-size: 200% 200%;
+            animation: moveStripes 20s linear infinite;
+        }
+
+        @keyframes moveStripes {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        .racing-lines-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .racing-line {
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(to right, transparent, #E10600, transparent);
+            animation: racingLine 3s ease-in-out infinite;
+        }
+
+        .racing-line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .racing-line:nth-child(2) { top: 40%; animation-delay: 0.5s; }
+        .racing-line:nth-child(3) { top: 60%; animation-delay: 1s; }
+        .racing-line:nth-child(4) { top: 80%; animation-delay: 1.5s; }
+
+        @keyframes racingLine {
+            0% { transform: translateX(-100%); opacity: 0; }
+            25% { opacity: 1; }
+            75% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+
+        .glow-orb-1 {
+            position: absolute;
+            width: 384px;
+            height: 384px;
+            background: #E10600;
+            border-radius: 50%;
+            filter: blur(96px);
+            opacity: 0.2;
+            top: 10%;
+            left: 10%;
+            animation: floatOrb1 10s ease-in-out infinite;
+        }
+
+        .glow-orb-2 {
+            position: absolute;
+            width: 384px;
+            height: 384px;
+            background: #FFD700;
+            border-radius: 50%;
+            filter: blur(96px);
+            opacity: 0.1;
+            bottom: 10%;
+            right: 10%;
+            animation: floatOrb2 12s ease-in-out infinite;
+        }
+
+        @keyframes floatOrb1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(100px, 50px) scale(1.2); }
+        }
+
+        @keyframes floatOrb2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-100px, 100px) scale(1.3); }
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .page-title {
+            font-size: 4rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title .gradient-text {
+            background: linear-gradient(to right, #FFD700, white, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.3rem;
+            color: #C0C0C8;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-fade {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 128px;
+            background: linear-gradient(to top, #0A0A0F, transparent);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .main-content {
+            padding: 4rem 0;
+        }
+
+        /* Table of Contents */
+        .toc-card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(225, 6, 0, 0.2);
+            margin-bottom: 3rem;
+            position: sticky;
+            top: 100px;
+        }
+
+        .toc-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #FFD700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .toc-list li:last-child {
+            border-bottom: none;
+        }
+
+        .toc-list a {
+            color: #C0C0C8;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: block;
+            padding-left: 1rem;
+            border-left: 3px solid transparent;
+        }
+
+        .toc-list a:hover {
+            color: #E10600;
+            padding-left: 1.5rem;
+            border-left-color: #E10600;
+        }
+
+        /* Rules Layout */
+        .rules-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        /* Article Card */
+        .article-card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(225, 6, 0, 0.2);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-out both;
+            scroll-margin-top: 120px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .article-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #E10600, #ff4500);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .article-content {
+            color: #C0C0C8;
+            font-size: 1.05rem;
+            line-height: 1.9;
+        }
+
+        .article-content h4 {
+            color: #FFD700;
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem;
+            font-weight: 700;
+        }
+
+        .article-content p {
+            margin-bottom: 1.25rem;
+        }
+
+        .article-content ul {
+            margin: 1rem 0 1.5rem 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        .penalty-box {
+            background: rgba(225, 6, 0, 0.1);
+            border-left: 4px solid #E10600;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .penalty-box strong {
+            color: #E10600;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .definition-box {
+            background: rgba(255, 215, 0, 0.1);
+            border-left: 4px solid #FFD700;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .definition-box strong {
+            color: #FFD700;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Important Notice */
+        .important-notice {
+            background: linear-gradient(145deg, #E10600, #8b0000);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .important-notice h3 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 3rem 0 1.5rem;
+            border-top: 1px solid rgba(225, 6, 0, 0.3);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: #888;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .rules-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .toc-card {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                height: 300px;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .page-subtitle {
+                font-size: 1rem;
+            }
+
+            .article-card {
+                padding: 1.5rem;
+            }
+
+            .article-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body style="zoom: 80%;">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">F1 LEAGUE</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="standings.html">Standings</a></li>
+                <li><a href="rules.html" class="active">Rules</a></li>
+                <li><a href="drivers.html">Drivers</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="youtube.html">YouTube</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="animated-stripes"></div>
+        
+        <div class="racing-lines-container">
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+        </div>
+
+        <div class="glow-orb-1"></div>
+        <div class="glow-orb-2"></div>
+
+        <div class="hero-content">
+            <h1 class="page-title">
+                LEAGUE <span class="gradient-text">REGULATIONS</span>
+            </h1>
+            <p class="page-subtitle">Official racing rules and sporting regulations</p>
+        </div>
+
+        <div class="hero-fade"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <div class="important-notice">
+            <h3>⚠️ Important Notice</h3>
+            <p>All drivers are expected to have read, understood, and agreed to abide by these regulations. Ignorance of the rules is not an acceptable defense in steward inquiries.</p>
+        </div>
+
+        <div class="rules-layout">
+            <!-- Table of Contents -->
+            <aside class="toc-card">
+                <h3 class="toc-title">📋 Contents</h3>
+                <ul class="toc-list">
+                    <li><a href="#article1">Article 1: Corner Speed</a></li>
+                    <li><a href="#article2">Article 2: Alongside Status</a></li>
+                    <li><a href="#article3">Article 3: Braking Conduct</a></li>
+                    <li><a href="#article4">Article 4: Corner Conduct</a></li>
+                    <li><a href="#article5">Article 5: First Lap</a></li>
+                    <li><a href="#article6">Article 6: Safety Car</a></li>
+                    <li><a href="#article7">Article 7: Blue Flags</a></li>
+                    <li><a href="#article8">Article 8: Qualifying</a></li>
+                    <li><a href="#article9">Article 9: Stewarding</a></li>
+                    <li><a href="#article10">Article 10: Penalty Points</a></li>
+                </ul>
+            </aside>
+
+            <!-- Articles -->
+            <div class="rules-content">
+                <!-- Article 1 -->
+                <article id="article1" class="article-card">
+                    <span class="article-number">Article 1</span>
+                    <h2 class="article-title">Corner Speed & Gear Designations</h2>
+                    <div class="article-content">
+                        <p>To ensure clarity in incident analysis, corner speeds are defined as follows:</p>
+                        
+                        <div class="definition-box">
+                            <strong>Low-Speed Corner</strong>
+                            <p>A corner typically taken in 1st, 2nd, or 3rd gear.</p>
+                        </div>
+
+                        <div class="definition-box">
+                            <strong>Medium-Speed Corner</strong>
+                            <p>A corner typically taken in 4th or 5th gear.</p>
+                        </div>
+
+                        <div class="definition-box">
+                            <strong>High-Speed Corner</strong>
+                            <p>A corner typically taken in 6th gear or higher.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 2 -->
+                <article id="article2" class="article-card">
+                    <span class="article-number">Article 2</span>
+                    <h2 class="article-title">The Principle of 'Alongside' Status</h2>
+                    <div class="article-content">
+                        <h4>2.1 Definition of 'Alongside'</h4>
+                        <p>An attacking car is deemed 'Significantly Alongside' when its front axle is level with the defending car's rear axle before the braking point.</p>
+
+                        <h4>2.2 Earning the Right to Space</h4>
+                        <p>The attacker must achieve 'Alongside' status before the defender commences their turn-in for the corner. Once this is established, the attacker has a right to racing room, and the defender loses the right to the racing line.</p>
+
+                        <h4>2.3 Defender's Obligation</h4>
+                        <p>A defender who has a car 'Alongside' them is required to leave a minimum of one car's width of tarmac. Failure to do so, resulting in the attacker being forced off track, is deemed "Squeezing."</p>
+                        
+                        <div class="penalty-box">
+                            <strong>Standard Penalty</strong>
+                            <p>5 or 10 second time penalty based on severity</p>
+                        </div>
+
+                        <h4>2.4 Attacker's Obligation</h4>
+                        <p>An attacker who has been granted space must stay within it. Causing a collision by understeering or sliding into the defending car from the inside is deemed "Causing a Collision."</p>
+                        
+                        <div class="penalty-box">
+                            <strong>Standard Penalty</strong>
+                            <p>5 or 10 second time penalty based on severity</p>
+                        </div>
+
+                        <h4>2.5 Right to Review</h4>
+                        <p>Any incident where the racing room is disputed, and which does not fall under another specific article, may be reviewed by the stewards on a case-by-case basis and penalized accordingly.</p>
+                    </div>
+                </article>
+
+                <!-- Article 3 -->
+                <article id="article3" class="article-card">
+                    <span class="article-number">Article 3</span>
+                    <h2 class="article-title">Braking Conduct</h2>
+                    <div class="article-content">
+                        <h4>3.1 Leading and Following Car</h4>
+                        <p>The responsibility of the lead car is to brake consistently and predictably, and the responsibility of the following car is to follow the lead car, without making contact.</p>
+                        
+                        <div class="penalty-box">
+                            <strong>Penalty</strong>
+                            <p>5-Second Time Penalty for a minor offense and a 10-Second Time Penalty for a major offense.</p>
+                        </div>
+
+                        <h4>3.2 Overtaking Under Braking (Dive Bomb)</h4>
+                        <p><strong>3.2.1 Conditions for a Legal Lunge:</strong> A 'dive bomb' is legal only if the attacking driver can execute the move and negotiate the corner cleanly without making contact or forcing the other driver off the track to avoid a collision. A dive bomb should only be done from a respectable delta; diving from far back (beyond 0.3s) is extremely optimistic and bound to fail, in which case the blame will be placed entirely on the attacker.</p>
+
+                        <p><strong>3.2.2 Illegal Lunge:</strong> A lunge is deemed illegal if the attacker makes contact because they lock up, miss the apex, and cannot control their car.</p>
+                        
+                        <div class="penalty-box">
+                            <strong>Standard Penalty</strong>
+                            <p>10-Second Time Penalty. If this action causes the victim's race to be critically compromised (e.g., wing loss, retirement), the penalty may be escalated to a Drive-Through or as per the stewards' discretion.</p>
+                        </div>
+
+                        <h4>3.3 Late Brake Defense</h4>
+                        <p>When a defending driver with a pace disadvantage (due to damage, tire delta, or DRS) defends, they have the right to defend their position. The defending driver may move only once to defend before committing to the braking point. Moving/weaving under braking is strictly prohibited.</p>
+                        
+                        <p>Both drivers must account for their tire grip, track grip, and dirty air before committing to the corner. Both drivers must provide enough room to the other and stick to the line they chose to enter the corner (not the racing line). Any aggressive line change, even if the other driver has not achieved alongside status, can be reviewed on a case-by-case basis by the stewards and penalized.</p>
+                    </div>
+                </article>
+
+                <!-- Article 4 -->
+                <article id="article4" class="article-card">
+                    <span class="article-number">Article 4</span>
+                    <h2 class="article-title">Corner-Specific Conduct</h2>
+                    <div class="article-content">
+                        <p><strong>Preamble:</strong> Any collision on or off the track is viewed based on its cause, not merely the action. If multiple actions are involved, it is subject to steward review to determine the weight of each action.</p>
+
+                        <h4>4.1 Single Apex Corners</h4>
+                        <p><strong>The Inside Line:</strong> The driver on the inside, having established position per Article 2, has the right to the apex. They must, however, take a tight line and are not permitted to "wash out" on exit and hit the outside car.</p>
+
+                        <p><strong>The Outside Line:</strong> The driver on the outside must cede the apex and leave the required space. They must anticipate that the inside car will be present and cannot take their normal racing line. To attempt to turn in on an inside car is a violation.</p>
+
+                        <h4>4.2 Double Apex Corners</h4>
+                        <p><strong>4.2.1 High-Speed (e.g., Silverstone's Maggots/Becketts):</strong> Side-by-side racing is exceptionally dangerous. The driver on the inside line for the second apex has the positional advantage. The driver on the outside for the first apex must be prepared to lift off or back out before the change of direction if they are not fully clear of the other car.</p>
+
+                        <p><strong>4.2.2 The Switchback:</strong> When a 'switchback' maneuver occurs (attacker inside on the first apex, defender inside on the second or vice versa), both drivers share a heightened responsibility.</p>
+
+                        <p><strong>4.2.3 The Slingshot:</strong> When a 'slingshot' maneuver occurs (defender inside on both apexes, attacker on the outside), the attacking driver bears a heightened responsibility.</p>
+
+                        <p><strong>4.2.4 Pushing Off-Track:</strong> An attacker or defender, when committing to a corner, must stick to their line. They are allowed to move mid-corner based on their chosen maneuver only if they are fully in control of their car.</p>
+
+                        <p><strong>4.2.5 Overtaking Outside of the Track:</strong> Overtaking must always be done within the track limits. Any overtaking outside the track, by either cutting a corner or deliberately running wide, can be reviewed and penalized.</p>
+
+                        <p><strong>4.2.6 Corner Cutting:</strong> Under this ruleset, the lobby will always be created with corner cutting stringency set to 'Strict'. For fairness, corner cutting is delegated to the game engine for enforcement.</p>
+
+                        <div class="penalty-box">
+                            <strong>Penalty</strong>
+                            <p>Contact initiated in this phase will be judged based on which driver failed to leave adequate space or demonstrate sufficient caution. Standard Penalty: 5 or 10 second time penalty based on severity.</p>
+                        </div>
+
+                        <h4>4.3 Additional Guidelines</h4>
+                        <p><strong>4.3.1 Pushing Off-Track:</strong> Forcing another driver off the circuit by making contact from behind or the side in a braking zone or corner exit is illegal.</p>
+
+                        <p><strong>4.3.2 Cutting Off / Unsafe Re-entry:</strong> Abruptly changing direction in a braking zone, causing the following car to take drastic evasive action or make contact. This includes rejoining the track unsafely after an error.</p>
+
+                        <div class="penalty-box">
+                            <strong>Standard Penalty</strong>
+                            <p>5 or 10 second time penalty based on severity</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 5 -->
+                <article id="article5" class="article-card">
+                    <span class="article-number">Article 5</span>
+                    <h2 class="article-title">First Lap Incidents</h2>
+                    <div class="article-content">
+                        <p>A higher standard of care is expected from all drivers on Lap 1 as "Racing incidents" are less likely to be excused. <strong>Races are not won in first corners.</strong></p>
+                    </div>
+                </article>
+
+                <!-- Article 6 -->
+                <article id="article6" class="article-card">
+                    <span class="article-number">Article 6</span>
+                    <h2 class="article-title">Safety Car & VSC Restarts</h2>
+                    <div class="article-content">
+                        <p><strong>Preamble:</strong> The primary objective during a Safety Car or Virtual Safety Car period is to maintain a safe, predictable, and fair order.</p>
+
+                        <h4>6.1 During VSC or Safety Car Condition</h4>
+                        <p><strong>6.1.1 Maintaining Formation under Safety Car:</strong> Drivers must stay within ten (10) car lengths of the car ahead. Intentionally dropping back further to gain an acceleration advantage for the restart is prohibited.</p>
+                        
+                        <div class="penalty-box">
+                            <strong>Standard Penalty</strong>
+                            <p>5-Second Time Penalty</p>
+                        </div>
+
+                        <p><strong>6.1.2 Pace and Unpredictable Braking:</strong> Under virtual or full safety car conditions, the game assumes all drivers should be at 50% pace. If you are ahead of your delta (too fast), move away from the racing line and slow down.</p>
+                        
+                        <div class="penalty-box">
+                            <strong>Standard Penalty</strong>
+                            <p>10-Second Time Penalty</p>
+                        </div>
+
+                        <h4>6.2 Pace and Unpredictable Braking (Restarts)</h4>
+                        <p>The race leader controls the pace on a restart, but all drivers must behave predictably. Erratic acceleration and braking, or braking unnecessarily on the racing line (brake-checking), is considered dangerous driving.</p>
+                        
+                        <div class="penalty-box">
+                            <strong>Standard Penalty</strong>
+                            <p>10-Second Time Penalty</p>
+                        </div>
+
+                        <h4>6.3 Overtaking on Restart</h4>
+                        <p>Overtaking is strictly forbidden before crossing the start/finish line once the Safety Car has entered the pits.</p>
+                        
+                        <div class="penalty-box">
+                            <strong>Standard Penalty</strong>
+                            <p>A 10 to 30-second time penalty, with the severity based on how much advantage was gained.</p>
+                        </div>
+
+                        <h4>6.4 Following Game Instructions (Lapped Cars)</h4>
+                        <p>When the game instructs lapped cars to overtake the Safety Car, they must do so promptly and safely.</p>
+                        
+                        <div class="penalty-box">
+                            <strong>Standard Penalty for non-compliance</strong>
+                            <p>5-Second Time Penalty</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 7 -->
+                <article id="article7" class="article-card">
+                    <span class="article-number">Article 7</span>
+                    <h2 class="article-title">Blue Flags (Lapped Traffic)</h2>
+                    <div class="article-content">
+                        <h4>7.1 Lapped Driver's Obligation</h4>
+                        <p>When shown a blue flag, you are being lapped by a lead car. You are required to let the faster car through in a safe and predictable manner.</p>
+                        <h4>7.2 Compliance Window:</h4>
+                        <p>You must facilitate the pass within three (3) marshalling sectors (the purple/green/yellow indicators on your track map) of receiving the first blue flag.</p>
+                        <h4>7.3 Safe Yielding:</h4>
+                        <p>The recommended method is to momentarily lift the throttle on a straight and move slightly off the racing line. Do NOT brake suddenly or unpredictably. In a corner sequence, it is often safer to take the corner normally and allow the pass on the following straight.</p>
+                        <h4>7.4 Ghosting Etiquette:</h4>
+                        <p>Even if 'ghosting' for lapped cars is enabled, it is not an excuse for the lead car to simply drive through the lapped car. The lapped driver is still required to actively move off the racing line and yield the position as per rule 7.3. Failure to do so is considered impeding.</p>
+                    </div>
+                </article>
+
+                <!-- Article 8 -->
+                <article id="article8" class="article-card">
+                    <span class="article-number">Article 8</span>
+                    <h2 class="article-title">Qualifying</h2>
+                    <div class="article-content">
+                        <h4>8.1 Session Format</h4>
+                        <p>Qualifying will be held in a single session (Short or Full, as announced before the event). All drivers must respect the session timer and complete their laps before the timer expires.</p>
+                        <h4>8.2 Out-Lap and In-Lap Etiquette</h4>
+                        <p>Drivers on an out-lap or in-lap must not impede those on a flying lap. Move off the racing line and do not block or distract other drivers.</p>
+                        <h4>8.3 Track Limits</h4>
+                        <p>Track limits are enforced by the game. Repeated abuse of track limits to gain an advantage may result in post-session penalties if reported and reviewed by stewards.</p>
+                        <h4>8.4 Unsafe Re-Entry</h4>
+                        <p>If you spin or go off track, rejoin safely. Do not drive across the racing line or into the path of oncoming cars.</p>
+                        <div class="penalty-box">
+                            <strong>Standard Penalty</strong>
+                            <p>Blocking or impeding: 5-place grid penalty. Unsafe re-entry: 5-place grid penalty or time penalty at stewards' discretion.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 9 -->
+                <article id="article9" class="article-card">
+                    <span class="article-number">Article 9</span>
+                    <h2 class="article-title">Stewarding</h2>
+                    <div class="article-content">
+                        <h4>9.1 Incident Reporting</h4>
+                        <p>Drivers may submit incident reports to the stewards within 24 hours of the race finish. Reports must include video evidence and a brief description.</p>
+                        <h4>9.2 Review Process</h4>
+                        <p>Stewards will review all submitted incidents and may request additional information. Decisions will be communicated to all involved parties before the next event.</p>
+                        <h4>9.3 Right to Appeal</h4>
+                        <p>Drivers may appeal a steward decision once per incident. Appeals must be submitted within 12 hours of the initial verdict and must provide new evidence or a clear rationale.</p>
+                        <div class="penalty-box">
+                            <strong>Notice</strong>
+                            <p>Abusive or disrespectful communication with stewards may result in additional penalties.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 10 -->
+                <article id="article10" class="article-card">
+                    <span class="article-number">Article 10</span>
+                    <h2 class="article-title">Penalty Points</h2>
+                    <div class="article-content">
+                        <h4>10.1 Penalty Point System</h4>
+                        <p>Penalty points are assigned for rule violations at the stewards' discretion. Accumulating 10 points results in a one-race ban; 15 points results in a season ban.</p>
+                        <h4>10.2 Expiry</h4>
+                        <p>Penalty points expire 6 races after being issued, provided no further incidents occur in that period.</p>
+                        <h4>10.3 Notification</h4>
+                        <p>Drivers will be notified of their penalty point status after each event if any points are added or removed.</p>
+                        <div class="penalty-box">
+                            <strong>Examples</strong>
+                            <ul>
+                                <li>Minor collision: 1-2 points</li>
+                                <li>Major collision or unsportsmanlike conduct: 3-5 points</li>
+                                <li>Abusive language or repeated offenses: 5+ points</li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2023 F1 League. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

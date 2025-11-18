@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 League Hub - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0A0A0F;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(225, 6, 0, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #E10600;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            padding: 0.5rem 0;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #E10600, #ff4500);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .nav-menu a:hover::before,
+        .nav-menu a.active::before {
+            width: 100%;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #E10600;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #0A0A0F 0%, #15151E 50%, #0A0A0F 100%);
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(225, 6, 0, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(225, 6, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(225, 6, 0, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .racing-lines-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .racing-line {
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(to right, transparent, #E10600, transparent);
+            animation: racingLine 3s ease-in-out infinite;
+        }
+
+        .racing-line:nth-child(1) { top: 15%; animation-delay: 0s; }
+        .racing-line:nth-child(2) { top: 35%; animation-delay: 0.5s; }
+        .racing-line:nth-child(3) { top: 55%; animation-delay: 1s; }
+        .racing-line:nth-child(4) { top: 75%; animation-delay: 1.5s; }
+
+        @keyframes racingLine {
+            0% { transform: translateX(-100%); opacity: 0; }
+            25% { opacity: 1; }
+            75% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 1200px;
+            padding: 0 2rem;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(225, 6, 0, 0.2);
+            border: 2px solid #E10600;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-size: 7rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title .line1 {
+            display: block;
+            background: linear-gradient(to right, #fff, #E10600, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+            background-size: 200% auto;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .hero-title .line2 {
+            display: block;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #C0C0C8;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+
+        .hero-btn {
+            padding: 1.25rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-btn-primary {
+            background: linear-gradient(135deg, #E10600, #ff4500);
+            color: white;
+            border: none;
+        }
+
+        .hero-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(225, 6, 0, 0.5);
+        }
+
+        .hero-btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .hero-btn-secondary:hover {
+            background: white;
+            color: #0A0A0F;
+            transform: translateY(-3px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-20px); }
+            60% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .scroll-indicator span {
+            display: block;
+            font-size: 2rem;
+            color: #E10600;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border-top: 1px solid rgba(225, 6, 0, 0.3);
+            border-bottom: 1px solid rgba(225, 6, 0, 0.3);
+            padding: 3rem 0;
+        }
+
+        .stats-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            animation: fadeIn 1s ease-out both;
+        }
+
+        .stat-item:nth-child(1) { animation-delay: 0.2s; }
+        .stat-item:nth-child(2) { animation-delay: 0.4s; }
+        .stat-item:nth-child(3) { animation-delay: 0.6s; }
+        .stat-item:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #E10600, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #E10600, #8b0000);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-description {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.25rem 3rem;
+            background: white;
+            color: #E10600;
+            font-weight: 900;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 3rem 0 1.5rem;
+            border-top: 1px solid rgba(225, 6, 0, 0.3);
+        }
+
+        .footer-content {
+            text-align: center;
+            color: #888;
+        }
+
+        .footer-content p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-title {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body style="zoom: 76%;">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">F1 LEAGUE</a>
+            <ul class="nav-menu">
+                <li><a href="index.html"  class="active">Home</a></li>
+                <li><a href="standings.html">Standings</a></li>
+                <li><a href="rules.html">Rules</a></li>
+                <li><a href="drivers.html">Drivers</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="youtube.html">Youtube</a></li>
+                <li><a href="news.html">news</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        
+        <div class="racing-lines-container">
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+            <div class="racing-line"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-badge">🏁 Season 2025 • Round 13 of 17</div>
+            
+            <h1 class="hero-title">
+                <span class="line1">KENTUCKY RACING</span>
+                <span class="line2">League</span>
+            </h1>
+            
+            <p class="hero-subtitle">
+                Join the most competitive F1 25 racing league. Weekly races, intense battles, and championship glory await.
+            </p>
+            
+            <div class="hero-buttons">
+                <a href="standings.html" class="hero-btn hero-btn-primary">View Standings</a>
+                <a href="calendar.html" class="hero-btn hero-btn-secondary">Race Calendar</a>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">
+            <span>↓</span>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-value">20</div>
+                <div class="stat-label">Active Drivers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Races Completed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Races Remaining</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Points Gap</div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Race?</h2>
+                <p class="cta-description">
+                    Join our community of competitive racers and fight for championship glory every weekend
+                </p>
+                <a href="calendar.html" class="cta-button">View Next Race</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2025 F1 25 League Championship. All rights reserved.</p>
+            <p>Powered by F1 25 Game | EA Sports</p>
+        </div>
+    </footer>
+
+    <script src="js/data-manager.js"></script>
+    <script>
+        // Load real data from JSON files
+        async function loadRealData() {
+            try {
+                // Load all data from JSON files (with localStorage fallback)
+                const races = await window.dataManager.getRaces();
+                const drivers = await window.dataManager.getDrivers();
+                const driverStandings = await window.dataManager.getDriverStandings();
+                
+                const totalRaces = races.length;
+                const completedRaces = races.filter(r => r.status === 'completed').length;
+                const remainingRaces = totalRaces - completedRaces;
+                
+                // Get current round (next incomplete race or last race)
+                let currentRound = completedRaces + 1;
+                if (currentRound > totalRaces) currentRound = totalRaces;
+                
+                // Count active drivers from standings or drivers data
+                const standingsArray = Array.isArray(driverStandings) ? driverStandings : Object.values(driverStandings);
+                const activeDrivers = Math.max(drivers.length, standingsArray.length);
+                
+                // Get points gap (difference between 1st and 2nd)
+                standingsArray.sort((a, b) => (b.points || 0) - (a.points || 0));
+                const pointsGap = standingsArray.length >= 2 ? 
+                    ((standingsArray[0].points || 0) - (standingsArray[1].points || 0)) : 0;
+                
+                // Update hero badge
+                const heroBadge = document.querySelector('.hero-badge');
+                if (heroBadge) {
+                    heroBadge.textContent = `🏁 Season 2025 • Round ${currentRound} of ${totalRaces}`;
+                }
+                
+                // Update stats
+                const statValues = document.querySelectorAll('.stat-value');
+                const statLabels = document.querySelectorAll('.stat-label');
+                
+                if (statValues.length >= 4) {
+                    statValues[0].textContent = activeDrivers;
+                    statLabels[0].textContent = 'Active Drivers';
+                    
+                    statValues[1].textContent = completedRaces;
+                    statLabels[1].textContent = 'Races Completed';
+                    
+                    statValues[2].textContent = remainingRaces;
+                    statLabels[2].textContent = 'Races Remaining';
+                    
+                    statValues[3].textContent = pointsGap;
+                    statLabels[3].textContent = 'Points Gap';
+                }
+                
+            } catch (error) {
+                console.error('Error loading real data:', error);
+            }
+        }
+        
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', loadRealData);
+        
+        // Smooth scroll for scroll indicator
+        document.querySelector('.scroll-indicator')?.addEventListener('click', function() {
+            window.scrollTo({
+                top: window.innerHeight,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
